@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         mealSelBtn.setOnClickListener {
             Log.d("DATE", "$date")
             val intent = Intent(this, MealSelection::class.java)
+            intent.putExtra("date", date)
             startActivity(intent)
         }
     }
