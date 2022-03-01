@@ -1,5 +1,6 @@
 package com.example.mealplan.ui
 
+import android.util.Log
 import android.view.ViewGroup
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -8,12 +9,13 @@ import android.view.LayoutInflater
 import android.widget.TextView
 import com.example.mealplan.R
 
-class MealsAdapter(private val onClick: (Meal) -> Unit)
-    : RecyclerView.Adapter<MealsAdapter.ViewHolder>() {
-    var meals: List<Meal> = listOf()
+class MealAdapter(private val onClick: (Meal) -> Unit)
+    : RecyclerView.Adapter<MealAdapter.ViewHolder>() {
+    var meals: MutableList<Meal?> = mutableListOf()
 
     fun updateMeals(meal: Meal?) {
-        meals = meal?.name ?: listOf()
+        meals.add(meal)
+        Log.d("MEALS: ", "$meals")
         notifyDataSetChanged()
     }
 
@@ -29,7 +31,7 @@ class MealsAdapter(private val onClick: (Meal) -> Unit)
     }
 
     class ViewHolder(itemView: View, val onClick: (Meal) -> Unit) : RecyclerView.ViewHolder(itemView) {
-        private val name_tv: TextView = itemView.findViewById(R.id.meal_name)
+        private val name_tv: TextView = itemView.findViewById(R.id.list_meal_name)
 
         private var currentMeal: Meal? = null
 
@@ -39,12 +41,12 @@ class MealsAdapter(private val onClick: (Meal) -> Unit)
             }
         }
 
-        fun bind(meal: Meal) {
+        fun bind(meal: Meal?) {
             currentMeal = meal
 
             val ctx = itemView.context
 
-            name_tv.text = meal.name
+            name_tv.text = meal?.name
         }
     }
 }

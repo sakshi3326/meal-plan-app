@@ -1,4 +1,4 @@
-package com.example.mealplan
+package com.example.mealplan.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.CalendarView
 import java.util.*
 import android.util.Log
+import com.example.mealplan.R
 import java.text.DateFormat
 
 class MainActivity : AppCompatActivity() {
@@ -28,7 +29,6 @@ class MainActivity : AppCompatActivity() {
 
         val mealSelBtn: Button = findViewById(R.id.meal_select)
         mealSelBtn.setOnClickListener {
-            Log.d("DATE", "$date")
             val intent = Intent(this, MealSelection::class.java)
             intent.putExtra("date", date)
             startActivity(intent)
