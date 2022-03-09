@@ -19,22 +19,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".ui.MealSelection"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:parentActivityName=".ui.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.MealActivity"
-            android:exported="false"
-            android:parentActivityName=".ui.MealSelection"/>
     </application>
 
 </manifest>

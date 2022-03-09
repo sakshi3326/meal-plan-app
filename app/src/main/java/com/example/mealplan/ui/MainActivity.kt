@@ -1,37 +1,40 @@
 package com.example.mealplan.ui
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
-import android.widget.CalendarView
 import java.util.*
-import android.util.Log
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.mealplan.R
-import java.text.DateFormat
+import androidx.navigation.ui.navigateUp
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var appBarConfig: AppBarConfiguration
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var calendar = Calendar.getInstance()
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(
+                R.id.nav_host_fragment
+            ) as NavHostFragment
+        val navController = navHostFragment.navController
+        appBarConfig = AppBarConfiguration(navController.graph)
 
-        val myCalendar: CalendarView = findViewById(R.id.calendar)
-        var date: String? = null
+        setupActionBarWithNavController(
+            navController,
+            appBarConfig
+        )
+    }
 
-        myCalendar.setOnDateChangeListener {view, year, month, day ->
-            calendar.set(year, month, day)
-            myCalendar.date = calendar.timeInMillis
-            val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM)
-            date = dateFormat.format(calendar.time)
-        }
-
-        val mealSelBtn: Button = findViewById(R.id.meal_select)
-        mealSelBtn.setOnClickListener {
-            val intent = Intent(this, MealSelection::class.java)
-            intent.putExtra("date", date)
-            startActivity(intent)
-        }
+    override fun onSupportNavigateUp(): Boolean {
+        val navController =
+            findNavController(R.id.nav_host_fragment)
+        return navController.navigateUp(appBarConfig) ||
+                super.onSupportNavigateUp()
     }
 }

@@ -11,6 +11,19 @@
     <string name="add_ingredient_btn">+</string>
     <string name="nutrition_information_label">Nutritional Information</string>
     <string name="select_recipe">Select a Recipe</string>
+    <string name="manage_recipes">Manage Recipes</string>
     <string name="save_meal">Save Meal</string>
     <string name="save_recipe">Save Recipe</string>
+    <string name="search_recipe">Find a Recipe...</string>
+    <string name="search_ingredient">Find an Ingredient...</string>
+    <string name="search_btn">Search</string>
+    <string name="add_recipe_btn">Add Recipe</string>
+
+
+    <string name="label_calendar_selection">Select a Date</string>
+    <string name="label_meal_selection">Select a Meal</string>
+    <string name="label_recipe_selection">Select a Recipe</string>
+    <string name="label_ingredients_selection">Search Ingredients</string>
+    <string name="label_meal_form">Build a Meal</string>
+    <string name="label_recipe_form">Build a Recipe</string>
 </resources>

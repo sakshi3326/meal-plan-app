@@ -1,52 +1,54 @@
 package com.example.mealplan.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mealplan.R
 import com.example.mealplan.data.Meal
 
-class MealSelection: AppCompatActivity() {
+class MealSelectionFragment: Fragment(R.layout.meal_selection_fragment) {
     private lateinit var mealAdapter: MealAdapter
     private lateinit var mealListRV: RecyclerView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.meal_selection)
 
-        mealListRV = findViewById(R.id.rv_meals)
+        mealListRV = view.findViewById(R.id.rv_meals)
 
         mealAdapter = MealAdapter(::onMealClick)
 
-        mealListRV.layoutManager = LinearLayoutManager(this)
+        mealListRV.layoutManager = LinearLayoutManager(requireContext())
         mealListRV.setHasFixedSize(true)
         mealListRV.adapter = mealAdapter
 
-        val selection_date: TextView = findViewById(R.id.selection_date)
-        selection_date.text = getIntent().extras?.get("date").toString()
+        val selection_date: TextView = view.findViewById(R.id.selection_date)
+        val args: MealSelectionFragmentArgs by navArgs()
+        val date = args.date
+        selection_date.text = date
 
         //this will look different once we've implemented full functionality. For now, just render for example
-        mealAdapter.updateMeals(Meal("Breakfast"))
-        mealAdapter.updateMeals(Meal("Lunch"))
-        mealAdapter.updateMeals(Meal("Dinner"))
+        mealAdapter.updateMeals(Meal("Breakfast", date))
+        mealAdapter.updateMeals(Meal("Lunch", date))
+        mealAdapter.updateMeals(Meal("Dinner", date))
 
-        val add_btn: Button = findViewById(R.id.add_meal_btn)
+        val add_btn: Button = view.findViewById(R.id.add_meal_btn)
         add_btn.setOnClickListener{
-            val add_txt: TextView = findViewById(R.id.add_meal_txt)
-            val new_meal = Meal(add_txt.text.toString())
+            val add_txt: TextView = view.findViewById(R.id.add_meal_txt)
+            val new_meal = Meal(add_txt.text.toString(), date)
             mealAdapter.updateMeals(new_meal)
         }
     }
 
     private fun onMealClick(meal: Meal) {
-        val intent = Intent(this, MealActivity::class.java)
-        intent.putExtra("name", meal.name)
-        startActivity(intent)
+        val directions = MealSelectionFragmentDirections.navigateFromMealSelectionToMealForm(meal)
+        findNavController().navigate(directions)
     }
 
     //for debugging purposes in the lifecycle model
@@ -64,11 +66,6 @@ class MealSelection: AppCompatActivity() {
     override fun onStop() {
         Log.d("Stop: ", "MealSelection")
         super.onStop()
-    }
-
-    override fun onRestart() {
-        Log.d("Restart: ", "MealSelection")
-        super.onRestart()
     }
 
     override fun onPause() {

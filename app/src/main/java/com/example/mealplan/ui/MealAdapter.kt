@@ -15,7 +15,6 @@ class MealAdapter(private val onClick: (Meal) -> Unit)
 
     fun updateMeals(meal: Meal?) {
         meals.add(meal)
-        Log.d("MEALS: ", "$meals")
         notifyDataSetChanged()
     }
 
