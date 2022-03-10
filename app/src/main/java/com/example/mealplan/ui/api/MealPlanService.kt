@@ -1,7 +1,6 @@
 package com.example.mealplan.ui.api
 
 import com.example.mealplan.data.IngredientsList
-import com.example.mealplan.data.MealPlanJsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
@@ -25,7 +24,6 @@ interface MealPlanService {
 		 */
 		fun create() : MealPlanService {
 			val moshi = Moshi.Builder()
-				.add(MealPlanJsonAdapter()) //TODO(Idk how or why Hess did this, Need to figure it out)
 				.addLast(KotlinJsonAdapterFactory())
 				.build()
 			return Retrofit.Builder()
