@@ -1,9 +1,7 @@
-package com.example.mealplan.api
+package com.example.mealplan.ui.api
 
 import com.example.mealplan.data.IngredientsList
 import com.example.mealplan.data.MealPlanJsonAdapter
-import com.example.mealplan.ui.IngredientsAdapter
-import com.example.mealplan.ui.MealAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit

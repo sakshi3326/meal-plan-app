@@ -27,4 +27,5 @@
     <string name="label_ingredients_selection">Search Ingredients</string>
     <string name="label_meal_form">Build a Meal</string>
     <string name="label_recipe_form">Build a Recipe</string>
+    <string name="add_ingredient">Add Ingredient</string>
 </resources>
