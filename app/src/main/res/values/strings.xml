@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Meal Plan</string>
     <string name="set_date">Set Date</string>
-    <string name="selection_title">Select a Meal</string>
+    <string name="selection_title"><u>Select a Meal:</u></string>
     <string name="add_meal_hint">Meal Name...</string>
     <string name="add_meal_btn">Add a Meal</string>
     <string name="date_select">Select Date</string>

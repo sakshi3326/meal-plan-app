@@ -1,29 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
     <TextView
+        android:id="@+id/selection_date"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toTopOf="@id/selection_title"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center_horizontal"
+        android:textColor="@color/purpleNightPrimary"
+        android:textSize="25sp"
+        android:paddingTop="20sp"/>
+    <TextView
         android:id="@+id/selection_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/selection_title"
-        app:layout_constraintBottom_toTopOf="@id/selection_date"
-        app:layout_constraintTop_toTopOf="parent"/>
-    <TextView
-        android:id="@+id/selection_date"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/selection_title"/>
+        app:layout_constraintTop_toBottomOf="@id/selection_date"
+        android:gravity="center_horizontal"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        android:paddingTop="20sp"
+        android:paddingBottom="30sp"
+        />
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/selection_date">
+        app:layout_constraintTop_toBottomOf="@id/selection_title"
+        android:layout_gravity="center_horizontal">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_meals"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal" />
     </FrameLayout>
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/add_meal_field"
@@ -31,16 +45,19 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@id/add_meal_btn"
         android:layout_gravity="center"
-        android:hint="@string/add_meal_hint">
+        android:hint="@string/add_meal_hint"
+        android:textColor="@color/black">
         <com.google.android.material.textfield.TextInputEditText
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:id="@+id/add_meal_txt"/>
+            android:id="@+id/add_meal_txt"
+            android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/add_meal_btn"
         android:id="@+id/add_meal_btn"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
