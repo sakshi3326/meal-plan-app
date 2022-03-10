@@ -42,6 +42,7 @@ class MealSelectionFragment: Fragment(R.layout.meal_selection_fragment) {
         add_btn.setOnClickListener{
             val add_txt: TextView = view.findViewById(R.id.add_meal_txt)
             val new_meal = Meal(add_txt.text.toString(), date)
+            add_txt.text = null
             mealAdapter.updateMeals(new_meal)
         }
     }
@@ -55,6 +56,8 @@ class MealSelectionFragment: Fragment(R.layout.meal_selection_fragment) {
 
     override fun onResume() {
         Log.d("Resume: ", "MealSelection")
+        val add_txt: TextView = requireView().findViewById(R.id.add_meal_txt)
+        add_txt.text = null
         super.onResume()
     }
 

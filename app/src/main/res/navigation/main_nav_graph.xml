@@ -18,6 +18,14 @@
         android:id="@+id/ingredients_selection"
         android:name="com.example.mealplan.ui.IngredientsSelectionFragment"
         android:label="@string/label_ingredients_selection">
+        <argument
+            android:name="meal"
+            app:argType="com.example.mealplan.data.Meal"
+            app:nullable="true"/>
+        <argument
+            android:name="recipe"
+            app:argType="com.example.mealplan.data.Recipe"
+            app:nullable="true"/>
         <action
             android:id="@+id/navigate_from_ingredients_selection_to_meal_form"
             app:destination="@id/meal_form"/>

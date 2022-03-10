@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.mealplan.R
+import com.example.mealplan.data.Recipe
 
 class RecipeFragment: Fragment(R.layout.recipe_fragment) {
 
@@ -21,7 +22,8 @@ class RecipeFragment: Fragment(R.layout.recipe_fragment) {
 
         val ingredients_btn: Button = view.findViewById(R.id.recipe_ingredients_add_btn)
         ingredients_btn.setOnClickListener {
-            val directions = RecipeFragmentDirections.navigateFromRecipeFormToIngredientsSelection()
+            // need to change the passed parameter to represent the current form
+            val directions = RecipeFragmentDirections.navigateFromRecipeFormToIngredientsSelection(null, Recipe("My Recipe", null, null))
             findNavController().navigate(directions)
         }
     }

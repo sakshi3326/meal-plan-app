@@ -34,7 +34,8 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
 
         val ingredients_btn: Button = view.findViewById(R.id.ingredients_add_btn)
         ingredients_btn.setOnClickListener {
-            val directions = MealFragmentDirections.navigateFromMealFormToIngredientsSelection()
+            // need to change the passed parameter to represent the current form
+            val directions = MealFragmentDirections.navigateFromMealFormToIngredientsSelection(meal, null)
             findNavController().navigate(directions)
         }
     }

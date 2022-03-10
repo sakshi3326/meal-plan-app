@@ -19,8 +19,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/selection_date"
-        app:layout_constraintBottom_toTopOf="@id/add_meal_field">
+        app:layout_constraintTop_toBottomOf="@id/selection_date">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_meals"
             android:layout_width="match_parent"
