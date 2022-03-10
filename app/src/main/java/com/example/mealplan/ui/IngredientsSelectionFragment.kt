@@ -6,32 +6,65 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mealplan.R
 import com.example.mealplan.data.Food
+import com.example.mealplan.data.LoadingStatus
+import com.google.android.material.progressindicator.CircularProgressIndicator
 
 class IngredientsSelectionFragment : Fragment(R.layout.ingredients_selection_fragment) {
-    private lateinit var ingredientsAdapter: IngredientsAdapter
+    private var ingredientsAdapter = IngredientsAdapter(::onIngredientClick)
+    private val viewModel: IngredientsViewModel by viewModels()
+
     private lateinit var ingredientListRV: RecyclerView
+    private lateinit var loadingIndicator: CircularProgressIndicator
+    private lateinit var errorText : TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
 
+        loadingIndicator = view.findViewById(R.id.loading_indicator)
+        errorText = view.findViewById(R.id.tv_search_error)
         ingredientListRV = view.findViewById(R.id.rv_ingredients)
-
-        ingredientsAdapter = IngredientsAdapter(::onIngredientClick)
 
         ingredientListRV.layoutManager = LinearLayoutManager(requireContext())
         ingredientListRV.setHasFixedSize(true)
+
         ingredientListRV.adapter = ingredientsAdapter
 
-        val search_btn: Button = view.findViewById(R.id.ingredient_search_btn)
-        search_btn.setOnClickListener {
-            val search_txt: TextView = view.findViewById(R.id.ingredient_search_text)
-            val query = search_txt.text.toString()
-            ingredientsAdapter.searchIngredients(query)
+        val searchBtn: Button = view.findViewById(R.id.ingredient_search_btn)
+        searchBtn.setOnClickListener {
+            val searchTxt: TextView = view.findViewById(R.id.ingredient_search_text)
+            val query = searchTxt.text.toString()
+            viewModel.searchIngredients(query)
+            ingredientListRV.scrollToPosition(0)
+        }
+
+        viewModel.ingredients.observe(viewLifecycleOwner) { ingredients ->
+            ingredientsAdapter.searchIngredients(ingredients)
+        }
+
+        viewModel.loadingStatus.observe(viewLifecycleOwner) { uiState ->
+            when(uiState) {
+                LoadingStatus.LOADING -> {
+                    loadingIndicator.visibility = View.VISIBLE
+                    ingredientListRV.visibility = View.INVISIBLE
+                    errorText.visibility = View.INVISIBLE
+                }
+                LoadingStatus.ERROR -> {
+                    loadingIndicator.visibility = View.INVISIBLE
+                    ingredientListRV.visibility = View.INVISIBLE
+                    errorText.visibility = View.VISIBLE
+                }
+                else -> {
+                    loadingIndicator.visibility = View.INVISIBLE
+                    ingredientListRV.visibility = View.VISIBLE
+                    errorText.visibility = View.INVISIBLE
+                }
+            }
         }
     }
 

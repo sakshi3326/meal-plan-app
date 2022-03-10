@@ -21,6 +21,8 @@
     <string name="add_recipe_btn">Add Recipe</string>
 
 
+    <string name="search_error">Oops! Something went wrong. Please check your internet connection and try again</string>
+
     <string name="label_calendar_selection">Select a Date</string>
     <string name="label_meal_selection">Select a Meal</string>
     <string name="label_recipe_selection">Select a Recipe</string>
