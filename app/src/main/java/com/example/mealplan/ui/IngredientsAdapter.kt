@@ -6,15 +6,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mealplan.R
-import com.example.mealplan.data.Ingredient
+import com.example.mealplan.data.Food
 
-class IngredientsAdapter(private val onClick: (Ingredient) -> Unit)
+class IngredientsAdapter(private val onClick: (Food) -> Unit)
     : RecyclerView.Adapter<IngredientsAdapter.ViewHolder>(){
-    var ingredients: MutableList<Ingredient?> = mutableListOf()
+    var ingredients: MutableList<Food?> = mutableListOf()
 
     fun searchIngredients(query: String) {
         // perform API search and update ingredients
-        ingredients.add(Ingredient(query)) // won't want to keep this - just proof of concept
+        //ingredients.add(Food(query)) // won't want to keep this - just proof of concept
         notifyDataSetChanged()
     }
 
@@ -29,10 +29,10 @@ class IngredientsAdapter(private val onClick: (Ingredient) -> Unit)
         holder.bind(this.ingredients[position])
     }
 
-    class ViewHolder(itemView: View, val onClick: (Ingredient) -> Unit) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View, val onClick: (Food) -> Unit) : RecyclerView.ViewHolder(itemView) {
         private val name_tv: TextView = itemView.findViewById(R.id.list_ingredient_name)
 
-        private var currentIngredient: Ingredient? = null
+        private var currentIngredient: Food? = null
 
         init {
             itemView.setOnClickListener{
@@ -40,7 +40,7 @@ class IngredientsAdapter(private val onClick: (Ingredient) -> Unit)
             }
         }
 
-        fun bind(ingredient: Ingredient?) {
+        fun bind(ingredient: Food?) {
             currentIngredient = ingredient
 
             val ctx = itemView.context
