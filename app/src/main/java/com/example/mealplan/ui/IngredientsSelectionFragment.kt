@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mealplan.R
-import com.example.mealplan.data.Ingredient
+import com.example.mealplan.data.Food
 
 class IngredientsSelectionFragment : Fragment(R.layout.ingredients_selection_fragment) {
     private lateinit var ingredientsAdapter: IngredientsAdapter
@@ -35,7 +35,7 @@ class IngredientsSelectionFragment : Fragment(R.layout.ingredients_selection_fra
         }
     }
 
-    private fun onIngredientClick(ingredient: Ingredient) {
+    private fun onIngredientClick(ingredient: Food) {
         // save either the recipe or meal passed into the args with this ingredient added
         findNavController().navigateUp()
     }
