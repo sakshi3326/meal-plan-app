@@ -7,31 +7,32 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mealplan.R
 import com.example.mealplan.data.Food
+import com.example.mealplan.data.IngredientsList
 
 class IngredientsAdapter(private val onClick: (Food) -> Unit)
-    : RecyclerView.Adapter<IngredientsAdapter.ViewHolder>(){
-    var ingredients: MutableList<Food?> = mutableListOf()
+    : RecyclerView.Adapter<IngredientsAdapter.IngredientsViewHolder>(){
+    var ingredients: MutableList<Food> = mutableListOf()
 
-    fun searchIngredients(query: String) {
-        // perform API search and update ingredients
-        //ingredients.add(Food(query)) // won't want to keep this - just proof of concept
-        notifyDataSetChanged()
+    fun searchIngredients(ingredientsList : IngredientsList?) {
+        if (ingredientsList != null) {
+            ingredients = ingredientsList.results.toMutableList()
+            notifyDataSetChanged()
+        }
     }
 
     override fun getItemCount() = this.ingredients.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientsViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.ingredient_list_item, parent, false)
-        return IngredientsAdapter.ViewHolder(view, onClick)
+        return IngredientsViewHolder(view, onClick)
     }
-    override fun onBindViewHolder(holder: IngredientsAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: IngredientsViewHolder, position: Int) {
         holder.bind(this.ingredients[position])
     }
 
-    class ViewHolder(itemView: View, val onClick: (Food) -> Unit) : RecyclerView.ViewHolder(itemView) {
-        private val name_tv: TextView = itemView.findViewById(R.id.list_ingredient_name)
-
+    class IngredientsViewHolder(itemView: View, private val onClick: (Food) -> Unit) : RecyclerView.ViewHolder(itemView) {
+        private val nameTv: TextView = itemView.findViewById(R.id.list_ingredient_name)
         private var currentIngredient: Food? = null
 
         init {
@@ -45,7 +46,7 @@ class IngredientsAdapter(private val onClick: (Food) -> Unit)
 
             val ctx = itemView.context
 
-            name_tv.text = ingredient?.name
+            nameTv.text = ingredient?.name
         }
     }
 }
