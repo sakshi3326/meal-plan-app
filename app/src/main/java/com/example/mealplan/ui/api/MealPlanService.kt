@@ -1,4 +1,4 @@
-package com.example.mealplan.api
+package com.example.mealplan.ui.api
 
 import com.example.mealplan.data.IngredientsList
 import com.squareup.moshi.Moshi
@@ -11,9 +11,9 @@ import retrofit2.http.Query
 interface MealPlanService {
 	//https://api.nal.usda.gov/fdc/v1/foods/search?api_key=kkYBL2fNKTOGlVPzlcndfmcXQ0KhGgL0Y3McXwgn&query=
 	@GET("search")
-	suspend fun searchIngredients(
-		@Query("query") query: String?,
-		@Query("api_key") apiKey: String = "kkYBL2fNKTOGlVPzlcndfmcXQ0KhGgL0Y3McXwgn"
+	suspend fun loadFiveDayForecast(
+		@Query("api_key") apiKey: String = "kkYBL2fNKTOGlVPzlcndfmcXQ0KhGgL0Y3McXwgn",
+		@Query("query") city: String?
 	) : IngredientsList
 
 	companion object {
