@@ -9,13 +9,22 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.mealplan.R
 import com.example.mealplan.data.Meal
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class MealFragment: Fragment(R.layout.meal_fragment) {
     lateinit var meal: Meal
+    lateinit var name: TextView
+    lateinit var desc: TextView
+    lateinit var notes: TextView
+    lateinit var url: TextView
+
+    private val mealViewModel: MealViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,8 +33,14 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
         val args: MealFragmentArgs by navArgs()
         meal = args.meal
 
-        val name: TextView = view.findViewById(R.id.meal_name)
+        name = view.findViewById(R.id.meal_name)
         name.text = meal.name
+        desc = view.findViewById(R.id.meal_description_text)
+        desc.text = meal.description
+        notes = view.findViewById(R.id.meal_notes_text)
+        notes.text = meal.notes
+        url = view.findViewById(R.id.meal_url_text)
+        url.text = meal.url
 
         val save_btn: Button = view.findViewById(R.id.save_meal_btn)
         save_btn.setOnClickListener{
@@ -48,7 +63,7 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
 
     // saves the current form fields into the meal table
     fun saveMeal() {
-        null
+        mealViewModel.addMeal(Meal(meal.name, meal.date, desc.text.toString(), notes.text.toString(), url.text.toString()))
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -67,7 +82,10 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
                 findNavController().navigate(directions)
                 true
             }
-            else -> super.onOptionsItemSelected(item)
+            else -> {
+                saveMeal()
+                super.onOptionsItemSelected(item)
+            }
         }
     }
 
