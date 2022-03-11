@@ -13,9 +13,11 @@ class MealAdapter(private val onClick: (Meal) -> Unit)
     : RecyclerView.Adapter<MealAdapter.ViewHolder>() {
     var meals: MutableList<Meal?> = mutableListOf()
 
-    fun updateMeals(meal: Meal?) {
-        meals.add(meal)
-        notifyDataSetChanged()
+    fun updateMeals(mealList: List<Meal>?) {
+        if (mealList != null) {
+            meals = mealList.toMutableList()
+            notifyDataSetChanged()
+        }
     }
 
     override fun getItemCount() = this.meals.size

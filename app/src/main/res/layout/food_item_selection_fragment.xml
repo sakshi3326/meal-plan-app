@@ -7,29 +7,29 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ingredient_search_field"
+        android:id="@+id/food_item_search_field"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_gravity="center"
         android:hint="@string/search_ingredient">
         <com.google.android.material.textfield.TextInputEditText
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:id="@+id/ingredient_search_text"/>
+            android:id="@+id/food_item_search_text"/>
     </com.google.android.material.textfield.TextInputLayout>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/search_btn"
-        android:id="@+id/ingredient_search_btn"
-        app:layout_constraintTop_toBottomOf="@id/ingredient_search_field"/>
+        android:id="@+id/food_item_search_btn"
+        app:layout_constraintTop_toBottomOf="@id/food_item_search_field"/>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/ingredient_search_btn">
+        app:layout_constraintTop_toBottomOf="@id/food_item_search_btn">
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/rv_ingredients"/>
+            android:id="@+id/rv_food_items"/>
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/loading_indicator"
             android:layout_width="wrap_content"

@@ -1,6 +1,6 @@
 package com.example.mealplan.api
 
-import com.example.mealplan.data.IngredientsList
+import com.example.mealplan.data.FoodItemsList
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
@@ -14,7 +14,7 @@ interface MealPlanService {
 	suspend fun searchIngredients(
 		@Query("query") query: String?,
 		@Query("api_key") apiKey: String = "kkYBL2fNKTOGlVPzlcndfmcXQ0KhGgL0Y3McXwgn"
-	) : IngredientsList
+	) : FoodItemsList
 
 	companion object {
 		private const val BASE_URL = "https://api.nal.usda.gov/fdc/v1/foods/"

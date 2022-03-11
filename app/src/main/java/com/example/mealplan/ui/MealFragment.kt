@@ -42,13 +42,13 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
 
     fun saveAndExit() {
         // save to the meal table
-        val meal: Meal = saveMeal()
+        saveMeal()
         findNavController().navigateUp()
     }
 
     // saves the current form fields into the meal table
-    fun saveMeal(): Meal {
-        return Meal(meal.name, meal.date)
+    fun saveMeal() {
+        null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
