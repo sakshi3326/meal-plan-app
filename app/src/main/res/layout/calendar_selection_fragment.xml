@@ -15,7 +15,9 @@
         android:layout_gravity="center"
         android:textColor="@android:color/background_dark"
         android:textStyle="bold"
+        android:textSize="30sp"
         android:text="@string/set_date"
+        android:textAlignment="center"
         android:padding="20dp"/>
 
     <CalendarView
