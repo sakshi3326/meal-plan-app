@@ -1,83 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MealFragment">
-    <TextView
-        android:id="@+id/meal_name"
+    tools:context=".ui.MealFragment"
+    android:orientation="vertical">
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent" />
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/meal_description_field"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/meal_name"
-        android:layout_gravity="center"
-        android:hint="@string/meal_description">
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight=".5" >
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:id="@+id/meal_description_text"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/ingredients_description_frame"
-        app:layout_constraintTop_toBottomOf="@id/meal_description_field"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ingredients_description"
-            android:text="@string/ingredients"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ingredients_add_btn"
-            app:layout_constraintRight_toRightOf="parent"
-            android:text="@string/add_ingredient_btn"
-            app:layout_constraintTop_toTopOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/ingredients_description_frame"
-        android:id="@+id/nutrition_information_label"
-        android:text="@string/nutrition_information_label"/>
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/meal_notes_field"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/nutrition_information_label"
-        android:layout_gravity="center"
-        android:hint="@string/meal_notes">
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:id="@+id/meal_notes_text"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/meal_url_field"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/meal_notes_field"
-        android:layout_gravity="center"
-        android:hint="@string/meal_url">
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:id="@+id/meal_url_text"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/save_meal_btn"
-        android:text="@string/save_meal"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/meal_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="15dp"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/meal_description_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/meal_name"
+                android:layout_gravity="center"
+                android:hint="@string/meal_description">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:id="@+id/meal_description_text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ingredients_description_frame"
+                app:layout_constraintTop_toBottomOf="@id/meal_description_field"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ingredients_description"
+                    android:text="@string/ingredients"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textColor="@color/black"
+                    android:textSize="15dp"
+                    android:paddingStart="18dp"
+                    android:paddingTop="5dp"/>
+                <Button
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/ingredients_add_btn"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:text="@string/add_ingredient_btn"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginRight="18dp"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/ingredient_example"
+                android:text="ingredient list here"
+                android:textColor="@color/black"
+                android:textSize="12dp"
+                android:paddingStart="25dp"
+                android:paddingTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/ingredients_description_frame"
+                app:layout_constraintBottom_toTopOf="@id/nutrition_information_label"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/ingredients_description_frame"
+                android:id="@+id/nutrition_information_label"
+                android:text="@string/nutrition_information_label"
+                android:textColor="@color/black"
+                android:textSize="15dp"
+                android:paddingStart="18dp"
+                android:paddingTop="15dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/calories"
+                android:text="Total calories: "
+                android:textColor="@color/black"
+                android:textSize="12dp"
+                android:paddingStart="25dp"
+                android:paddingTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/nutrition_information_label" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/fat"
+                android:text="Total fat: "
+                android:textColor="@color/black"
+                android:textSize="12dp"
+                android:paddingStart="25dp"
+                android:paddingTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/calories" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/carbs"
+                android:text="Total carbohydrates: "
+                android:textColor="@color/black"
+                android:textSize="12dp"
+                android:paddingStart="25dp"
+                android:paddingTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/fat" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:layout_weight=".5">
+
+       <androidx.constraintlayout.widget.ConstraintLayout
+           android:id="@+id/bottom"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+
+           <com.google.android.material.textfield.TextInputLayout
+               android:id="@+id/meal_notes_field"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:hint="@string/meal_notes"
+               app:layout_constraintBottom_toTopOf="@id/meal_url_field">
+
+               <com.google.android.material.textfield.TextInputEditText
+                   android:id="@+id/meal_notes_text"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content" />
+           </com.google.android.material.textfield.TextInputLayout>
+
+           <com.google.android.material.textfield.TextInputLayout
+               android:id="@+id/meal_url_field"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_gravity="center"
+               android:hint="@string/meal_url"
+               app:layout_constraintBottom_toTopOf="@id/save_meal_btn">
+
+               <com.google.android.material.textfield.TextInputEditText
+                   android:id="@+id/meal_url_text"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content" />
+           </com.google.android.material.textfield.TextInputLayout>
+
+           <Button
+               android:id="@+id/save_meal_btn"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="@string/save_meal"
+               app:layout_constraintBottom_toBottomOf="parent" />
+       </androidx.constraintlayout.widget.ConstraintLayout>
+   </RelativeLayout>
+
+</LinearLayout>
