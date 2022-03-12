@@ -11,15 +11,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mealplan.R
-import com.example.mealplan.data.Food
+import com.example.mealplan.data.FoodItem
 import com.example.mealplan.data.LoadingStatus
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
-class IngredientsSelectionFragment : Fragment(R.layout.ingredients_selection_fragment) {
-    private var ingredientsAdapter = IngredientsAdapter(::onIngredientClick)
-    private val viewModel: IngredientsViewModel by viewModels()
+class FoodItemsSelectionFragment : Fragment(R.layout.food_item_selection_fragment) {
+    private var foodItemsAdapter = FoodItemsAdapter(::onFoodItemClick)
+    private val viewModel: FoodItemsViewModel by viewModels()
 
-    private lateinit var ingredientListRV: RecyclerView
+    private lateinit var foodItemListRV: RecyclerView
     private lateinit var loadingIndicator: CircularProgressIndicator
     private lateinit var errorText : TextView
 
@@ -28,53 +28,52 @@ class IngredientsSelectionFragment : Fragment(R.layout.ingredients_selection_fra
 
         loadingIndicator = view.findViewById(R.id.loading_indicator)
         errorText = view.findViewById(R.id.tv_search_error)
-        ingredientListRV = view.findViewById(R.id.rv_ingredients)
+        foodItemListRV = view.findViewById(R.id.rv_food_items)
 
-        ingredientListRV.layoutManager = LinearLayoutManager(requireContext())
-        ingredientListRV.setHasFixedSize(true)
+        foodItemListRV.layoutManager = LinearLayoutManager(requireContext())
+        foodItemListRV.setHasFixedSize(true)
 
-        ingredientListRV.adapter = ingredientsAdapter
+        foodItemListRV.adapter = foodItemsAdapter
 
-        val searchBtn: Button = view.findViewById(R.id.ingredient_search_btn)
+        val searchBtn: Button = view.findViewById(R.id.food_item_search_btn)
         searchBtn.setOnClickListener {
-            val searchTxt: TextView = view.findViewById(R.id.ingredient_search_text)
+            val searchTxt: TextView = view.findViewById(R.id.food_item_search_text)
             val query = searchTxt.text.toString()
             viewModel.searchIngredients(query)
-            ingredientListRV.scrollToPosition(0)
+            foodItemListRV.scrollToPosition(0)
         }
 
+        viewModel.foodItems.observe(viewLifecycleOwner) { foodItem ->
+            foodItemsAdapter.searchIngredients(foodItem)
+        }
         val clearBtn: Button = view.findViewById(R.id.ingredient_clear_btn)
         clearBtn.setOnClickListener {
             val searchTxt: TextView = view.findViewById(R.id.ingredient_search_text)
             searchTxt.text = ""
         }
 
-        viewModel.ingredients.observe(viewLifecycleOwner) { ingredients ->
-            ingredientsAdapter.searchIngredients(ingredients)
-        }
-
         viewModel.loadingStatus.observe(viewLifecycleOwner) { uiState ->
             when(uiState) {
                 LoadingStatus.LOADING -> {
                     loadingIndicator.visibility = View.VISIBLE
-                    ingredientListRV.visibility = View.INVISIBLE
+                    foodItemListRV.visibility = View.INVISIBLE
                     errorText.visibility = View.INVISIBLE
                 }
                 LoadingStatus.ERROR -> {
                     loadingIndicator.visibility = View.INVISIBLE
-                    ingredientListRV.visibility = View.INVISIBLE
+                    foodItemListRV.visibility = View.INVISIBLE
                     errorText.visibility = View.VISIBLE
                 }
                 else -> {
                     loadingIndicator.visibility = View.INVISIBLE
-                    ingredientListRV.visibility = View.VISIBLE
+                    foodItemListRV.visibility = View.VISIBLE
                     errorText.visibility = View.INVISIBLE
                 }
             }
         }
     }
 
-    private fun onIngredientClick(ingredient: Food) {
+    private fun onFoodItemClick(foodItem: FoodItem) {
         // save either the recipe or meal passed into the args with this ingredient added
         findNavController().navigateUp()
     }
