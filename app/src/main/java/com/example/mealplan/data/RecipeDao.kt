@@ -16,6 +16,6 @@ interface RecipeDao {
     @Query("SELECT * FROM Recipe")
     fun getAllRecipes(): Flow<List<Recipe>>
 
-    @Query("SELECT * FROM Recipe WHERE name LIKE :name")
-    fun searchRecipesByName(name: String): Flow<Recipe?>
+    @Query("SELECT * FROM Recipe WHERE name LIKE :name") //could improve to find by more than name
+    fun searchRecipesByName(name: String): Flow<List<Recipe>?>
 }

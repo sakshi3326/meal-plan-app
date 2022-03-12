@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MealDao {
-    @Insert(onConflict = REPLACE)
+    @Insert(onConflict = REPLACE) //equivalent to saying this is just an update/insert function
     suspend fun insert(meal: Meal)
 
     @Delete

@@ -13,9 +13,11 @@ class RecipeAdapter(private val onClick: (Recipe) -> Unit)
     : RecyclerView.Adapter<RecipeAdapter.ViewHolder>() {
     var recipes: MutableList<Recipe?> = mutableListOf()
 
-    fun updateRecipes(recipe: Recipe?) {
-        recipes.add(recipe)
-        // add recipe to database
+    fun updateRecipes(recipeData: List<Recipe>?) {
+        recipes = if (recipeData != null)
+            recipeData.toMutableList()
+        else
+            mutableListOf(null)
         notifyDataSetChanged()
     }
 

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.View.*
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +21,8 @@ class RecipeSelectionFragment: Fragment(R.layout.recipe_selection_fragment) {
     private lateinit var recipeListRV: RecyclerView
     private lateinit var origin: String
     private lateinit var meal: Meal
+
+    private val viewModel: RecipeViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,11 +49,9 @@ class RecipeSelectionFragment: Fragment(R.layout.recipe_selection_fragment) {
         recipeListRV.setHasFixedSize(true)
         recipeListRV.adapter = recipeAdapter
 
-        recipeAdapter.updateRecipes(Recipe("Recipe1", "Some notes", null))
-        recipeAdapter.updateRecipes(Recipe("Recipe2", "Some notes", null))
-        recipeAdapter.updateRecipes(Recipe("Recipe3", "Some notes", null))
-        recipeAdapter.updateRecipes(Recipe("Recipe4", "Some notes", null))
-        recipeAdapter.updateRecipes(Recipe("Recipe5", "Some notes", null))
+        viewModel.recipes.observe(viewLifecycleOwner) { recipes ->
+            recipeAdapter.updateRecipes(recipes)
+        }
 
         Log.d("Create: ", "Recipe Selection")
     }
