@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.view.View.*
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -36,6 +37,12 @@ class RecipeSelectionFragment: Fragment(R.layout.recipe_selection_fragment) {
                 val directions = RecipeSelectionFragmentDirections.navigateFromRecipeSelectionToRecipeForm(null)
                 findNavController().navigate(directions)
             }
+        }
+
+        val clearBtn: Button = view.findViewById(R.id.recipe_search_btn)
+        clearBtn.setOnClickListener {
+            val searchBox: TextView = view.findViewById(R.id.recipe_search_field)
+            searchBox.text = ""
         }
 
         recipeListRV = view.findViewById(R.id.recipes_rv)

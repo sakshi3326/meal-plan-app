@@ -43,6 +43,12 @@ class IngredientsSelectionFragment : Fragment(R.layout.ingredients_selection_fra
             ingredientListRV.scrollToPosition(0)
         }
 
+        val clearBtn: Button = view.findViewById(R.id.ingredient_clear_btn)
+        clearBtn.setOnClickListener {
+            val searchTxt: TextView = view.findViewById(R.id.ingredient_search_text)
+            searchTxt.text = ""
+        }
+
         viewModel.ingredients.observe(viewLifecycleOwner) { ingredients ->
             ingredientsAdapter.searchIngredients(ingredients)
         }
