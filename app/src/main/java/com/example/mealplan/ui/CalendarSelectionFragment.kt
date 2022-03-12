@@ -23,6 +23,9 @@ class CalendarSelectionFragment : Fragment(R.layout.calendar_selection_fragment)
         val myCalendar: CalendarView = view.findViewById(R.id.calendar)
 
         var date = ""
+        myCalendar.date = calendar.timeInMillis
+        val dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM)
+        date = dateFormat.format(calendar.time)
 
         myCalendar.setOnDateChangeListener {_, year, month, day ->
             calendar.set(year, month, day)
