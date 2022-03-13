@@ -12,7 +12,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.mealplan.R
+import com.example.mealplan.data.FoodItem
 import com.example.mealplan.data.Meal
 import com.example.mealplan.data.Recipe
 import com.google.android.material.textfield.TextInputEditText
@@ -27,6 +30,11 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
 
     private val recipeViewModel: RecipeViewModel by viewModels()
     private val mealViewModel: MealViewModel by viewModels()
+
+    //NEW Adapter
+    private var mealIngredientsAdapter = MealIngredientsAdapter(::onFoodItemClick)
+    private val mealIngredientsViewModel: MealIngredientsViewModel by viewModels()
+    private lateinit var mealIngredientsRV: RecyclerView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +52,14 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
         url = view.findViewById(R.id.meal_url_text)
         url.text = meal.url
 
+        //NEW Adapter
+        mealIngredientsRV = view.findViewById(R.id.rv_meal_ingredients)
+
+        mealIngredientsRV.layoutManager = LinearLayoutManager(requireContext())
+        mealIngredientsRV.setHasFixedSize(true)
+
+        mealIngredientsRV.adapter = mealIngredientsAdapter
+
         val save_btn: Button = view.findViewById(R.id.save_meal_btn)
         save_btn.setOnClickListener{
             saveAndExit()
@@ -54,6 +70,13 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
             val directions = MealFragmentDirections.navigateFromMealFormToIngredientsSelection(Meal(meal.name, meal.date, desc.text.toString(), notes.text.toString(), url.text.toString()), null)
             findNavController().navigate(directions)
         }
+    }
+
+
+    private fun onFoodItemClick(foodItem: FoodItem) {
+        // save either the recipe or meal passed into the args with this ingredient added
+        //findNavController().navigateUp()
+        //TODO(Whatever this does)
     }
 
     fun saveAndExit() {
