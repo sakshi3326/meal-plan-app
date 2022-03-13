@@ -36,15 +36,23 @@ class RecipeSelectionFragment: Fragment(R.layout.recipe_selection_fragment) {
         if (origin == "MainActivity") {
             val recipeAddBtn: Button = view.findViewById(R.id.add_recipe_btn)
             recipeAddBtn.visibility = VISIBLE
-            recipeAddBtn.setOnClickListener{
-                val directions = RecipeSelectionFragmentDirections.navigateFromRecipeSelectionToRecipeForm(null)
+            recipeAddBtn.setOnClickListener {
+                val directions =
+                    RecipeSelectionFragmentDirections.navigateFromRecipeSelectionToRecipeForm(null)
                 findNavController().navigate(directions)
             }
         }
 
-        val clearBtn: Button = view.findViewById(R.id.recipe_search_btn)
+        val searchBtn: Button = view.findViewById(R.id.recipe_search_btn)
+        searchBtn.setOnClickListener{
+            val searchBox: TextView = view.findViewById(R.id.recipe_search_text)
+            viewModel.searchRecipes(searchBox.text.toString())
+            Log.d("SEARCH: ", searchBox.text.toString())
+        }
+
+        val clearBtn: Button = view.findViewById(R.id.recipe_clear_btn)
         clearBtn.setOnClickListener {
-            val searchBox: TextView = view.findViewById(R.id.recipe_search_field)
+            val searchBox: TextView = view.findViewById(R.id.recipe_search_text)
             searchBox.text = ""
         }
 

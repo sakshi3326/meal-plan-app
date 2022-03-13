@@ -48,7 +48,7 @@ class FoodItemsSelectionFragment : Fragment(R.layout.food_item_selection_fragmen
         }
         val clearBtn: Button = view.findViewById(R.id.ingredient_clear_btn)
         clearBtn.setOnClickListener {
-            val searchTxt: TextView = view.findViewById(R.id.ingredient_search_text)
+            val searchTxt: TextView = view.findViewById(R.id.food_item_search_text)
             searchTxt.text = ""
         }
 

@@ -32,13 +32,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/search_btn"
-        android:id="@+id/food_item_search_btn"
         app:layout_constraintTop_toBottomOf="@id/food_item_search_field"
         app:layout_constraintLeft_toLeftOf="@id/food_item_search_field"
         android:gravity="center_horizontal">
 
         <Button
-            android:id="@+id/ingredient_search_btn"
+            android:id="@+id/food_item_search_btn"
             android:layout_width="100dp"
             android:layout_margin="10dp"
             android:layout_height="wrap_content"
@@ -59,7 +58,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/food_item_search_btn">
+        app:layout_constraintTop_toBottomOf="@id/food_item_search_btn_ctnr">
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
