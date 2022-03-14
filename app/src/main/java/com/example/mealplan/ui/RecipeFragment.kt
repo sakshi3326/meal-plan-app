@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.mealplan.R
@@ -13,8 +14,28 @@ import com.example.mealplan.data.Recipe
 
 class RecipeFragment: Fragment(R.layout.recipe_fragment) {
 
+    lateinit var recipeDesc: TextView
+    lateinit var recipeNotes: TextView
+    lateinit var recipeUrl: TextView
+
+    private val viewModel: RecipeViewModel by viewModels()
+
+    var recipe: Recipe? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        recipeDesc = view.findViewById(R.id.recipe_description_text)
+        recipeNotes = view.findViewById(R.id.recipe_notes_text)
+        recipeUrl = view.findViewById(R.id.recipe_url_text)
+
+        val args: RecipeFragmentArgs by navArgs()
+        if (args.recipe != null) {
+            recipe = args.recipe
+            recipeDesc.text = recipe!!.description
+            recipeNotes.text = recipe?.notes.toString()
+            recipeUrl.text = recipe?.url.toString()
+        }
 
         val save_btn: Button = view.findViewById(R.id.save_recipe_btn)
         save_btn.setOnClickListener{
@@ -24,8 +45,26 @@ class RecipeFragment: Fragment(R.layout.recipe_fragment) {
         val ingredients_btn: Button = view.findViewById(R.id.recipe_ingredients_add_btn)
         ingredients_btn.setOnClickListener {
             // need to change the passed parameter to represent the current form
-            val directions = RecipeFragmentDirections.navigateFromRecipeFormToIngredientsSelection(null, Recipe("My Recipe", null, null))
-            findNavController().navigate(directions)
+            if (recipe == null) {
+                recipe = Recipe(
+                    description = recipeDesc.text.toString(),
+                    notes = recipeNotes.text.toString(),
+                    url = recipeUrl.text.toString()
+                )
+                viewModel.addRecipe(recipe!!)
+            }
+            else {
+                recipe?.description = recipeDesc.text.toString()
+                recipe?.notes = recipeNotes.text.toString()
+                recipe?.url = recipeUrl.text.toString()
+                viewModel.updateRecipe(recipe!!)
+            }
+            viewModel.recipe.observe(viewLifecycleOwner) { thisRecipe ->
+                viewModel.recipe.removeObservers(viewLifecycleOwner)
+                val directions = RecipeFragmentDirections.navigateFromRecipeFormToIngredientsSelection(null, thisRecipe)
+                findNavController().navigate(directions)
+            }
+
         }
     }
 
@@ -37,7 +76,20 @@ class RecipeFragment: Fragment(R.layout.recipe_fragment) {
     }
 
     private fun saveRecipe() {
-        null
+        if (recipe == null) {
+            var r = Recipe(
+                description = recipeDesc.text.toString(),
+                notes = recipeNotes.text.toString(),
+                url = recipeUrl.text.toString()
+            )
+            viewModel.addRecipe(r)
+        }
+        else {
+            recipe?.description = recipeDesc.text.toString()
+            recipe?.notes = recipeNotes.text.toString()
+            recipe?.url = recipeUrl.text.toString()
+            viewModel.updateRecipe(recipe!!)
+        }
     }
 
 

@@ -86,6 +86,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/add_ingredients_btn"
-        android:id="@+id/add_meal_btn"
+        android:id="@+id/add_food_items_btn"
         app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

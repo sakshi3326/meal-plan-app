@@ -20,7 +20,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:id="@+id/meal_description_text"/>
+            android:id="@+id/recipe_description_text"/>
     </com.google.android.material.textfield.TextInputLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

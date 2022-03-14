@@ -1,10 +1,7 @@
 package com.example.mealplan.ui
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.mealplan.data.*
 import kotlinx.coroutines.launch
 
@@ -15,10 +12,17 @@ class RecipeViewModel(application: Application): AndroidViewModel(application) {
     )
 
     var recipes: LiveData<List<Recipe>?> = repository.getAllRecipes().asLiveData()
+    var recipe = MutableLiveData<Recipe>()
 
-    fun addRecipe(recipe: Recipe) {
+    fun addRecipe(addRecipe: Recipe) {
         viewModelScope.launch {
-            repository.insertRecipe(recipe)
+            recipe.postValue(repository.insertRecipe(addRecipe))
+        }
+    }
+
+    fun updateRecipe(updateRecipe: Recipe) {
+        viewModelScope.launch {
+            recipe.postValue(repository.updateRecipe(updateRecipe))
         }
     }
 

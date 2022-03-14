@@ -1,5 +1,6 @@
 package com.example.mealplan.data
 
+import android.util.Log
 import androidx.room.*
 import androidx.room.OnConflictStrategy.ABORT
 import androidx.room.OnConflictStrategy.REPLACE
@@ -7,8 +8,13 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FoodItemDao {
+    suspend fun insert(foodItemData: FoodItemData): FoodItemData {
+        foodItemData.id = _insert(foodItemData)
+        return foodItemData
+    }
+
     @Insert(onConflict = REPLACE)
-    suspend fun insert(foodItemData: FoodItemData): Long
+    suspend fun _insert(foodItemData: FoodItemData): Long
 
     @Delete
     suspend fun delete(foodItemData: FoodItemData)

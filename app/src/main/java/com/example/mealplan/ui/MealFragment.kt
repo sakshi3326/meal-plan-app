@@ -15,8 +15,6 @@ import androidx.navigation.fragment.navArgs
 import com.example.mealplan.R
 import com.example.mealplan.data.Meal
 import com.example.mealplan.data.Recipe
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 
 class MealFragment: Fragment(R.layout.meal_fragment) {
     lateinit var meal: Meal
@@ -29,7 +27,7 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
     private val mealViewModel: MealViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
         val args: MealFragmentArgs by navArgs()
@@ -51,8 +49,16 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
 
         val ingredients_btn: Button = view.findViewById(R.id.ingredients_add_btn)
         ingredients_btn.setOnClickListener {
-            val directions = MealFragmentDirections.navigateFromMealFormToIngredientsSelection(Meal(meal.name, meal.date, desc.text.toString(), notes.text.toString(), url.text.toString()), null)
-            findNavController().navigate(directions)
+            meal.description = desc.text.toString()
+            meal.notes = notes.text.toString()
+            meal.url = url.text.toString()
+            mealViewModel.updateMeal(meal)
+            mealViewModel.meal.observe(viewLifecycleOwner) { thisMeal ->
+                mealViewModel.meal.removeObservers(viewLifecycleOwner)
+                val directions = MealFragmentDirections.navigateFromMealFormToIngredientsSelection(thisMeal, null)
+                findNavController().navigate(directions)
+            }
+
         }
     }
 
@@ -64,7 +70,10 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
 
     // saves the current form fields into the meal table
     fun saveMeal() {
-        mealViewModel.addMeal(Meal(meal.name, meal.date, desc.text.toString(), notes.text.toString(), url.text.toString()))
+        meal.description = desc.text.toString()
+        meal.notes = notes.text.toString()
+        meal.url = url.text.toString()
+        mealViewModel.updateMeal(meal)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -74,12 +83,19 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.save_recipe_item -> {
-                recipeViewModel.addRecipe(Recipe(meal.name, desc.text.toString(), notes.text.toString(), url.text.toString()))
+                //need to update the foodItems for this meal to point to the recipe also
+                // in other words, we need to adjust the recipe_id field for each foodItem such
+                // that they point to the recipe created by the following line:
+                recipeViewModel.addRecipe(Recipe(description = desc.text.toString(), notes = notes.text.toString(), url = url.text.toString()))
                 saveAndExit()
                 true
             }
             R.id.select_recipe_item -> {
-                val directions = MealFragmentDirections.navigateFromMealFormToRecipeSelection("meal", Meal(meal.name, meal.date, desc.text.toString(), notes.text.toString(), url.text.toString()))
+                meal.description = desc.text.toString()
+                meal.notes = notes.text.toString()
+                meal.url = url.text.toString()
+                mealViewModel.updateMeal(meal)
+                val directions = MealFragmentDirections.navigateFromMealFormToRecipeSelection("meal", meal)
                 findNavController().navigate(directions)
                 true
             }
@@ -94,6 +110,15 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
     //for debugging purposes in the lifecycle model
 
     override fun onResume() {
+        mealViewModel.getMealByDateAndName(meal.date, meal.name)
+        mealViewModel.meal.observe(viewLifecycleOwner) { thisMeal ->
+            meal = thisMeal
+            desc.text = meal.description
+            notes.text = meal.notes
+            url.text = meal.url
+            // need to update the ingredients here to display - data should be updated
+            // in the recipe selection fragment on the click listener "onRecipeClick"
+        }
         super.onResume()
         Log.d("Resume: ", "MealActivity")
     }

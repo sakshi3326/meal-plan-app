@@ -1,14 +1,13 @@
 package com.example.mealplan.data
 
 import android.content.Context
-import androidx.room.RoomDatabase
-import androidx.room.Room
-import androidx.room.Database
-import androidx.room.TypeConverters
+import androidx.room.*
 
 const val DATABASE_NAME = "mealplan-db"
 
-@Database(entities = [Recipe::class, Meal::class, FoodItemData::class, NutrientData::class], version = 1)
+@Database(
+    entities = [Recipe::class, Meal::class, FoodItemData::class, NutrientData::class],
+    version = 2)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun RecipeDao(): RecipeDao
@@ -27,8 +26,8 @@ abstract class AppDatabase : RoomDatabase(){
             }
         }
 
+        // for now, the database will clear itself when the version is changed - for easy testing
         private fun buildDatabase(context: Context) =
-            Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
-                .build()
+            Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME).allowMainThreadQueries().fallbackToDestructiveMigration().build()
     }
 }

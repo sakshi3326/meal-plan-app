@@ -1,16 +1,22 @@
 package com.example.mealplan.data
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 import java.io.Serializable
 
-@Entity
+@Entity(indices = [Index(value = ["description"], unique = true)])
 data class Recipe(
-    @PrimaryKey
-    val name: String,
-    val description: String? = null,
-    val notes: String? = null,
-    val url: String? = null,
-    val amounts: List<Int>? = null,
-    val ingredients: List<Int>? = null
+    @PrimaryKey(autoGenerate = true)
+    var id: Long = 0,
+    var description: String,
+    var notes: String? = null,
+    var url: String? = null,
 ) : Serializable
+
+data class RecipeWithItems(
+    @Embedded val recipe: Recipe,
+    @Relation(
+        parentColumn="id",
+        entityColumn = "recipe_id"
+    )
+    val items: List<FoodItemData>
+)

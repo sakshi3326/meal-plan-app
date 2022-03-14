@@ -33,19 +33,27 @@ class MealSelectionFragment: Fragment(R.layout.meal_selection_fragment) {
 
         val selection_date: TextView = view.findViewById(R.id.selection_date)
         val args: MealSelectionFragmentArgs by navArgs()
-        val date = args.date
+
+        val date: String = args.date
         selection_date.text = date
 
         viewModel.getMealByDate(date)
 
         viewModel.meals.observe(viewLifecycleOwner) { meals ->
-            mealAdapter.updateMeals(meals)
+            if (!meals.isNullOrEmpty())
+                mealAdapter.updateMeals(meals)
+            else {
+                viewModel.addMeal(Meal(name = "Breakfast", date = date))
+                viewModel.addMeal(Meal(name = "Lunch", date = date))
+                viewModel.addMeal(Meal(name = "Dinner", date = date))
+                viewModel.getMealByDate(date)
+            }
         }
 
         val add_btn: Button = view.findViewById(R.id.add_meal_btn)
         add_btn.setOnClickListener{
             val add_txt: TextView = view.findViewById(R.id.add_meal_txt)
-            val new_meal = Meal(add_txt.text.toString(), date)
+            val new_meal = Meal(name = add_txt.text.toString(), date = date)
             add_txt.text = null
             viewModel.addMeal(new_meal)
         }
