@@ -1,33 +1,22 @@
 package com.example.mealplan.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import androidx.lifecycle.*
 import com.example.mealplan.api.MealPlanService
-import com.example.mealplan.data.FoodItemsList
-import com.example.mealplan.data.FoodItemsListRepository
-import com.example.mealplan.data.LoadingStatus
+import com.example.mealplan.data.*
 import kotlinx.coroutines.launch
 
-class MealIngredientsViewModel : ViewModel(){
+class MealIngredientsViewModel(application: Application) : AndroidViewModel(application){
 	//private val repository = FoodItemsListRepository(MealPlanService.create())
+	private val repository = FoodItemRepository(
+		AppDatabase.getInstance(application).FoodItemDao()
+	)
+	var mealIngredients: LiveData<List<FoodItemData>?> = repository.searchItemsByMealID(0).asLiveData()
+	var mealIngredient = MutableLiveData<FoodItemData>()
 
-	private val _mealIngredients = MutableLiveData<FoodItemsList?>(null)
-	val mealIngredients: LiveData<FoodItemsList?> = _mealIngredients
-
-	private val _loadingStatus = MutableLiveData(LoadingStatus.SUCCESS)
-	val loadingStatus: LiveData<LoadingStatus> = _loadingStatus
-
-	/*fun searchIngredients(query: String?) {
+	fun showIngredients(mealID: Long) {
 		viewModelScope.launch {
-			_loadingStatus.value = LoadingStatus.LOADING
-			val result = repository.searchIngredientsList(query)
-			_foodItems.value = result.getOrNull()
-			_loadingStatus.value = when (result.isSuccess) {
-				true -> LoadingStatus.SUCCESS
-				false -> LoadingStatus.ERROR
+			mealIngredients = repository.searchItemsByMealID(mealID).asLiveData()
 			}
 		}
-	}*/
-}
+	}
