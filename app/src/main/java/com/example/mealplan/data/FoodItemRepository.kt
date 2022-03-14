@@ -9,5 +9,6 @@ class FoodItemRepository (private val dao: FoodItemDao){
     fun getAllItems() = dao.getAllItems()
     fun searchItemsByName(name: String) = dao.searchItemsByName(name)
     fun searchItemsByMealID(mealID: Long) = dao.searchItemsByMealID(mealID)
+    fun searchItemsByRecipeID(recipeID: Long) = dao.searchItemsByRecipeID(recipeID)
     fun getItemNutrients() = dao.getItemNutrients()
 }

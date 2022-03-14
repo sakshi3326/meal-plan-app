@@ -9,7 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.mealplan.R
+import com.example.mealplan.data.FoodItemData
 import com.example.mealplan.data.Recipe
 
 class RecipeFragment: Fragment(R.layout.recipe_fragment) {
@@ -18,23 +21,39 @@ class RecipeFragment: Fragment(R.layout.recipe_fragment) {
     lateinit var recipeNotes: TextView
     lateinit var recipeUrl: TextView
 
+
     private val viewModel: RecipeViewModel by viewModels()
 
-    var recipe: Recipe? = null
+    private var recipeIngredientsAdapter = RecipeIngredientsAdapter(::onFoodItemClick)
+    private val recipeIngredientsViewModel: RecipeIngredientsViewModel by viewModels()
+    private lateinit var recipeIngredientsRV: RecyclerView
 
+
+    var recipe: Recipe? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         recipeDesc = view.findViewById(R.id.recipe_description_text)
         recipeNotes = view.findViewById(R.id.recipe_notes_text)
         recipeUrl = view.findViewById(R.id.recipe_url_text)
+        //Recipe Adapter
+        recipeIngredientsRV = view.findViewById(R.id.rv_recipe_ingredients)
 
+        recipeIngredientsRV.layoutManager = LinearLayoutManager(requireContext())
+        recipeIngredientsRV.setHasFixedSize(true)
+
+        recipeIngredientsRV.adapter = recipeIngredientsAdapter
         val args: RecipeFragmentArgs by navArgs()
         if (args.recipe != null) {
             recipe = args.recipe
             recipeDesc.text = recipe!!.description
             recipeNotes.text = recipe?.notes.toString()
             recipeUrl.text = recipe?.url.toString()
+            recipeIngredientsViewModel.showIngredients(recipe!!.id)
+        }
+
+        recipeIngredientsViewModel.recipeIngredients.observe(viewLifecycleOwner) { foodItem ->
+            recipeIngredientsAdapter.showIngredients(foodItem)
         }
 
         val save_btn: Button = view.findViewById(R.id.save_recipe_btn)
@@ -66,6 +85,12 @@ class RecipeFragment: Fragment(R.layout.recipe_fragment) {
             }
 
         }
+    }
+
+    private fun onFoodItemClick(foodItem: FoodItemData) {
+        // save either the recipe or meal passed into the args with this ingredient added
+        //findNavController().navigateUp()
+        //TODO(Whatever this does)
     }
 
     private fun saveAndExit() {
