@@ -7,15 +7,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mealplan.R
 import com.example.mealplan.data.FoodItem
+import com.example.mealplan.data.FoodItemData
 import com.example.mealplan.data.FoodItemsList
 
-class MealIngredientsAdapter(private val onClick: (FoodItem) -> Unit)
+class MealIngredientsAdapter(private val onClick: (FoodItemData) -> Unit)
 	: RecyclerView.Adapter<MealIngredientsAdapter.MealIngredientsHolder>(){
-	var mealIngredients: MutableList<FoodItem> = mutableListOf()
+	var mealIngredients: MutableList<FoodItemData> = mutableListOf()
 
-	fun searchIngredients(foodItemsList : FoodItemsList?) {
-		if (foodItemsList != null) {
-			mealIngredients = foodItemsList.results.toMutableList()
+	fun showIngredients(ingredientsList : List<FoodItemData>?) {
+		if (ingredientsList != null) {
+			mealIngredients = ingredientsList.toMutableList()
 			notifyDataSetChanged()
 		}
 	}
@@ -31,9 +32,9 @@ class MealIngredientsAdapter(private val onClick: (FoodItem) -> Unit)
 		holder.bind(this.mealIngredients[position])
 	}
 
-	class MealIngredientsHolder(itemView: View, private val onClick: (FoodItem) -> Unit) : RecyclerView.ViewHolder(itemView) {
+	class MealIngredientsHolder(itemView: View, private val onClick: (FoodItemData) -> Unit) : RecyclerView.ViewHolder(itemView) {
 		private val nameTv: TextView = itemView.findViewById(R.id.list_meal_ingredient_name)
-		private var currentFoodItem: FoodItem? = null
+		private var currentFoodItem: FoodItemData? = null
 
 		init {
 			itemView.setOnClickListener{
@@ -41,7 +42,7 @@ class MealIngredientsAdapter(private val onClick: (FoodItem) -> Unit)
 			}
 		}
 
-		fun bind(foodItem: FoodItem?) {
+		fun bind(foodItem: FoodItemData) {
 			currentFoodItem = foodItem
 
 			val ctx = itemView.context

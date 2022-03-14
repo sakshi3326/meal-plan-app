@@ -25,6 +25,9 @@ interface FoodItemDao {
     @Query("SELECT * FROM FoodItemData WHERE name LIKE :name")
     fun searchItemsByName(name: String): Flow<FoodItemData?>
 
+    @Query("SELECT * FROM FoodItemData WHERE meal_id = :mealID")
+    fun searchItemsByMealID(mealID: Long): Flow<List<FoodItemData>?>
+
     @Transaction
     @Query("SELECT * FROM FoodItemData")
     fun getItemNutrients(): List<FoodItemDataWithNutrients>

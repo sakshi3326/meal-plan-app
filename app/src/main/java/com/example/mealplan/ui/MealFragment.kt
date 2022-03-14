@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mealplan.R
 import com.example.mealplan.data.FoodItem
+import com.example.mealplan.data.FoodItemData
 import com.example.mealplan.data.Meal
 import com.example.mealplan.data.Recipe
 
@@ -58,6 +59,12 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
 
         mealIngredientsRV.adapter = mealIngredientsAdapter
 
+        mealIngredientsViewModel.showIngredients(meal.id)
+
+        mealIngredientsViewModel.mealIngredients.observe(viewLifecycleOwner) { foodItem ->
+            mealIngredientsAdapter.showIngredients(foodItem)
+        }
+
         val save_btn: Button = view.findViewById(R.id.save_meal_btn)
         save_btn.setOnClickListener{
             saveAndExit()
@@ -79,7 +86,7 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
     }
 
 
-    private fun onFoodItemClick(foodItem: FoodItem) {
+    private fun onFoodItemClick(foodItem: FoodItemData) {
         // save either the recipe or meal passed into the args with this ingredient added
         //findNavController().navigateUp()
         //TODO(Whatever this does)
