@@ -1,5 +1,6 @@
 package com.example.mealplan.ui
 
+import android.app.ProgressDialog.show
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mealplan.R
 import com.example.mealplan.data.Meal
+import com.google.android.material.snackbar.Snackbar
 
 class MealSelectionFragment: Fragment(R.layout.meal_selection_fragment) {
     private lateinit var mealAdapter: MealAdapter
@@ -31,6 +33,7 @@ class MealSelectionFragment: Fragment(R.layout.meal_selection_fragment) {
         mealListRV.setHasFixedSize(true)
         mealListRV.adapter = mealAdapter
 
+        val snackError = Snackbar.make(view, "No text provided in Meal Name.", 3)
         val selection_date: TextView = view.findViewById(R.id.selection_date)
         val args: MealSelectionFragmentArgs by navArgs()
 
@@ -53,9 +56,16 @@ class MealSelectionFragment: Fragment(R.layout.meal_selection_fragment) {
         val add_btn: Button = view.findViewById(R.id.add_meal_btn)
         add_btn.setOnClickListener{
             val add_txt: TextView = view.findViewById(R.id.add_meal_txt)
-            val new_meal = Meal(name = add_txt.text.toString(), date = date)
-            add_txt.text = null
-            viewModel.addMeal(new_meal)
+            if(add_txt.text.toString().isEmpty()) {
+                Log.d("MealSelectionFragment", "No text provided in Meal Name")
+                Snackbar.make(view, "No text provided in Meal Name.", Snackbar.LENGTH_LONG).show()
+            }
+            else {
+                Log.d("MealSelectionFragment", "Text provided to Meal Name")
+                val new_meal = Meal(name = add_txt.text.toString(), date = date)
+                add_txt.text = null
+                viewModel.addMeal(new_meal)
+            }
         }
     }
 
