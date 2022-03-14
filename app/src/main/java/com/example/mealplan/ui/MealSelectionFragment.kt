@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,8 +18,10 @@ class MealSelectionFragment: Fragment(R.layout.meal_selection_fragment) {
     private lateinit var mealAdapter: MealAdapter
     private lateinit var mealListRV: RecyclerView
 
+    private val viewModel: MealViewModel by viewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
 
         mealListRV = view.findViewById(R.id.rv_meals)
 
@@ -30,20 +33,29 @@ class MealSelectionFragment: Fragment(R.layout.meal_selection_fragment) {
 
         val selection_date: TextView = view.findViewById(R.id.selection_date)
         val args: MealSelectionFragmentArgs by navArgs()
-        val date = args.date
+
+        val date: String = args.date
         selection_date.text = date
 
-        //this will look different once we've implemented full functionality. For now, just render for example
-        mealAdapter.updateMeals(Meal("Breakfast", date))
-        mealAdapter.updateMeals(Meal("Lunch", date))
-        mealAdapter.updateMeals(Meal("Dinner", date))
+        viewModel.getMealByDate(date)
+
+        viewModel.meals.observe(viewLifecycleOwner) { meals ->
+            if (!meals.isNullOrEmpty())
+                mealAdapter.updateMeals(meals)
+            else {
+                viewModel.addMeal(Meal(name = "Breakfast", date = date))
+                viewModel.addMeal(Meal(name = "Lunch", date = date))
+                viewModel.addMeal(Meal(name = "Dinner", date = date))
+                viewModel.getMealByDate(date)
+            }
+        }
 
         val add_btn: Button = view.findViewById(R.id.add_meal_btn)
         add_btn.setOnClickListener{
             val add_txt: TextView = view.findViewById(R.id.add_meal_txt)
-            val new_meal = Meal(add_txt.text.toString(), date)
+            val new_meal = Meal(name = add_txt.text.toString(), date = date)
             add_txt.text = null
-            mealAdapter.updateMeals(new_meal)
+            viewModel.addMeal(new_meal)
         }
     }
 

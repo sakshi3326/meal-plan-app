@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/ingredients_selection"
-        android:name="com.example.mealplan.ui.IngredientsSelectionFragment"
+        android:name="com.example.mealplan.ui.FoodItemsSelectionFragment"
         android:label="@string/label_ingredients_selection">
         <argument
             android:name="meal"

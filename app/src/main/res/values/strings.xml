@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Meal Plan</string>
-    <string name="set_date">Set Date</string>
+    <string name="set_date">Select a Date to Meal Plan For:</string>
     <string name="selection_title"><u>Select a Meal:</u></string>
     <string name="add_meal_hint">Meal Name...</string>
     <string name="add_meal_btn">Add a Meal</string>
@@ -10,7 +10,7 @@
     <string name="meal_url">URL (optional)</string>
     <string name="ingredients">Ingredients:</string>
     <string name="add_ingredient_btn">+</string>
-    <string name="nutrition_information_label">Nutritional Information</string>
+    <string name="nutrition_information_label">Nutritional Information:</string>
     <string name="select_recipe">Select a Recipe</string>
     <string name="manage_recipes">Manage Recipes</string>
     <string name="save_meal">Save Meal</string>
@@ -31,4 +31,5 @@
     <string name="label_recipe_form">Build a Recipe</string>
     <string name="add_ingredient">Add Ingredient</string>
     <string name="add_ingredients_btn">Add Ingredients</string>
+    <string name="clear_btn">Clear</string>
 </resources>

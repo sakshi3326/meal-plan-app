@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.View
 import android.view.View.*
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,8 +23,11 @@ class RecipeSelectionFragment: Fragment(R.layout.recipe_selection_fragment) {
     private lateinit var origin: String
     private lateinit var meal: Meal
 
+    private val viewModel: RecipeViewModel by viewModels()
+    private val mealViewModel: MealViewModel by viewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
 
         val args: RecipeSelectionFragmentArgs by navArgs()
         origin = args.origin
@@ -32,10 +37,22 @@ class RecipeSelectionFragment: Fragment(R.layout.recipe_selection_fragment) {
         if (origin == "MainActivity") {
             val recipeAddBtn: Button = view.findViewById(R.id.add_recipe_btn)
             recipeAddBtn.visibility = VISIBLE
-            recipeAddBtn.setOnClickListener{
+            recipeAddBtn.setOnClickListener {
                 val directions = RecipeSelectionFragmentDirections.navigateFromRecipeSelectionToRecipeForm(null)
                 findNavController().navigate(directions)
             }
+        }
+
+        val searchBtn: Button = view.findViewById(R.id.recipe_search_btn)
+        searchBtn.setOnClickListener{
+            val searchBox: TextView = view.findViewById(R.id.recipe_search_text)
+            viewModel.searchRecipes(searchBox.text.toString())
+        }
+
+        val clearBtn: Button = view.findViewById(R.id.recipe_clear_btn)
+        clearBtn.setOnClickListener {
+            val searchBox: TextView = view.findViewById(R.id.recipe_search_text)
+            searchBox.text = ""
         }
 
         recipeListRV = view.findViewById(R.id.recipes_rv)
@@ -46,18 +63,22 @@ class RecipeSelectionFragment: Fragment(R.layout.recipe_selection_fragment) {
         recipeListRV.setHasFixedSize(true)
         recipeListRV.adapter = recipeAdapter
 
-        recipeAdapter.updateRecipes(Recipe("Recipe1", "Some notes", null))
-        recipeAdapter.updateRecipes(Recipe("Recipe2", "Some notes", null))
-        recipeAdapter.updateRecipes(Recipe("Recipe3", "Some notes", null))
-        recipeAdapter.updateRecipes(Recipe("Recipe4", "Some notes", null))
-        recipeAdapter.updateRecipes(Recipe("Recipe5", "Some notes", null))
+        viewModel.recipes.observe(viewLifecycleOwner) { recipes ->
+            recipeAdapter.updateRecipes(recipes)
+        }
 
         Log.d("Create: ", "Recipe Selection")
     }
 
     private fun onRecipeClick(recipe: Recipe) {
         if (origin != "MainActivity") {
-            // will need to save the meal fields as the recipe clicked on before going up
+            meal.description = recipe.description
+            meal.notes = recipe.notes
+            meal.url = recipe.url
+            //need to update the ingredients for this meal:
+            // delete the existing ingredients that it has
+            // add all the recipe's ingredients to the meal
+            mealViewModel.updateMeal(meal)
             findNavController().navigateUp()
         }
         else {

@@ -10,9 +10,9 @@
         app:endIconDrawable="@drawable/ic_baseline_clear_24"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:endIconMode="clear_text"
-        android:id="@+id/ingredient_search_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/food_item_search_field"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_gravity="center"
         android:hint="Find an ingredient..."
@@ -25,34 +25,44 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:id="@+id/ingredient_search_text"/>
+            android:id="@+id/food_item_search_text"/>
     </com.google.android.material.textfield.TextInputLayout>
     <LinearLayout
-        android:id="@+id/ingredient_search_btn_ctnr"
+        android:id="@+id/food_item_search_btn_ctnr"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/ingredient_search_field"
-        app:layout_constraintLeft_toLeftOf="@id/ingredient_search_field"
+        android:text="@string/search_btn"
+        app:layout_constraintTop_toBottomOf="@id/food_item_search_field"
+        app:layout_constraintLeft_toLeftOf="@id/food_item_search_field"
         android:gravity="center_horizontal">
 
         <Button
-            android:id="@+id/ingredient_search_btn"
+            android:id="@+id/food_item_search_btn"
             android:layout_width="100dp"
             android:layout_margin="10dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@string/search_btn"
-            app:layout_constraintTop_toBottomOf="@id/ingredient_search_field"
+            app:layout_constraintTop_toBottomOf="@id/food_item_search_field"
+            tools:ignore="MissingConstraints"/>
+        <Button
+            android:id="@+id/ingredient_clear_btn"
+            android:layout_width="100dp"
+            android:layout_margin="10dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/clear_btn"
+            app:layout_constraintTop_toBottomOf="@id/food_item_search_field"
             tools:ignore="MissingConstraints"/>
     </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/ingredient_search_btn_ctnr">
+        app:layout_constraintTop_toBottomOf="@id/food_item_search_btn_ctnr">
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/rv_ingredients"/>
+            android:id="@+id/rv_food_items"/>
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/loading_indicator"
             android:layout_width="wrap_content"
@@ -76,6 +86,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/add_ingredients_btn"
-        android:id="@+id/add_meal_btn"
+        android:id="@+id/add_food_items_btn"
         app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

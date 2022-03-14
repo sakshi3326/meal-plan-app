@@ -13,9 +13,8 @@ class RecipeAdapter(private val onClick: (Recipe) -> Unit)
     : RecyclerView.Adapter<RecipeAdapter.ViewHolder>() {
     var recipes: MutableList<Recipe?> = mutableListOf()
 
-    fun updateRecipes(recipe: Recipe?) {
-        recipes.add(recipe)
-        // add recipe to database
+    fun updateRecipes(recipeData: List<Recipe>?) {
+        recipes = recipeData?.toMutableList() ?: mutableListOf(null)
         notifyDataSetChanged()
     }
 
@@ -46,7 +45,7 @@ class RecipeAdapter(private val onClick: (Recipe) -> Unit)
 
             val ctx = itemView.context
 
-            name_tv.text = recipe?.name
+            name_tv.text = recipe?.description
         }
     }
 }
