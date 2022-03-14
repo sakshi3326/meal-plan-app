@@ -33,7 +33,6 @@ class MealSelectionFragment: Fragment(R.layout.meal_selection_fragment) {
         mealListRV.setHasFixedSize(true)
         mealListRV.adapter = mealAdapter
 
-        val snackError = Snackbar.make(view, "No text provided in Meal Name.", 3)
         val selection_date: TextView = view.findViewById(R.id.selection_date)
         val args: MealSelectionFragmentArgs by navArgs()
 
@@ -62,6 +61,7 @@ class MealSelectionFragment: Fragment(R.layout.meal_selection_fragment) {
             }
             else {
                 Log.d("MealSelectionFragment", "Text provided to Meal Name")
+                Snackbar.make(view, add_txt.text.toString() + " was added to the meal list.", Snackbar.LENGTH_LONG).show()
                 val new_meal = Meal(name = add_txt.text.toString(), date = date)
                 add_txt.text = null
                 viewModel.addMeal(new_meal)
