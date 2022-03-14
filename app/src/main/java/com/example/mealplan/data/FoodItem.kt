@@ -13,10 +13,11 @@ data class Nutrient(
     @Json(name = "deprivationDescription") val calc: String?
 )
 
-@Entity
+@Entity(foreignKeys = arrayOf(ForeignKey(entity = FoodItemData::class, parentColumns = arrayOf("id"), childColumns = arrayOf("item_id"), onDelete = ForeignKey.CASCADE)))
 data class NutrientData(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    var id: Long = 0,
+    val item_id: Long,
     //There is a nutrient named Energy, that is Calories.
     val name: String,//Nutrient name Ex: Protein, total lipid (fat)
     val unit: String, //Ex. G for grams, (why its capitalize, no idea.)
@@ -50,10 +51,12 @@ data class FoodItem(
     val servingSize: Double?
 )
 
-@Entity
+@Entity(foreignKeys = arrayOf(ForeignKey(entity = Recipe::class, parentColumns = arrayOf("id"), childColumns = arrayOf("recipe_id")), ForeignKey(entity = Meal::class, parentColumns = arrayOf("id"), childColumns = arrayOf("meal_id"))))
 data class FoodItemData(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    var id: Long = 0,
+    var recipe_id: Long? = null,
+    var meal_id: Long? = null,
     //Name of food, who owns it, and the brand name
     val name: String,
     val brandOwner: String?,
@@ -78,7 +81,7 @@ data class FoodItemDataWithNutrients(
     @Embedded val foodItemData: FoodItemData,
     @Relation(
         parentColumn="id",
-        entityColumn = "id"
+        entityColumn = "item_id"
     )
     val nutrients: List<NutrientData>
 )

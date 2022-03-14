@@ -14,10 +14,7 @@ class RecipeAdapter(private val onClick: (Recipe) -> Unit)
     var recipes: MutableList<Recipe?> = mutableListOf()
 
     fun updateRecipes(recipeData: List<Recipe>?) {
-        recipes = if (recipeData != null)
-            recipeData.toMutableList()
-        else
-            mutableListOf(null)
+        recipes = recipeData?.toMutableList() ?: mutableListOf(null)
         notifyDataSetChanged()
     }
 
@@ -48,7 +45,7 @@ class RecipeAdapter(private val onClick: (Recipe) -> Unit)
 
             val ctx = itemView.context
 
-            name_tv.text = recipe?.name
+            name_tv.text = recipe?.description
         }
     }
 }

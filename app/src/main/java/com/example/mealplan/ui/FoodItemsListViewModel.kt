@@ -5,13 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mealplan.api.MealPlanService
-import com.example.mealplan.data.FoodItemsList
-import com.example.mealplan.data.FoodItemsListRepository
-import com.example.mealplan.data.LoadingStatus
+import com.example.mealplan.data.*
 import kotlinx.coroutines.launch
 
-class FoodItemsViewModel : ViewModel(){
-    private val repository = FoodItemsListRepository(MealPlanService.create())
+class FoodItemsListViewModel : ViewModel(){
+    private val listRepository = FoodItemsListRepository(MealPlanService.create())
 
     private val _foodItems = MutableLiveData<FoodItemsList?>(null)
     val foodItems: LiveData<FoodItemsList?> = _foodItems
@@ -22,7 +20,7 @@ class FoodItemsViewModel : ViewModel(){
     fun searchIngredients(query: String?) {
         viewModelScope.launch {
             _loadingStatus.value = LoadingStatus.LOADING
-            val result = repository.searchIngredientsList(query)
+            val result = listRepository.searchIngredientsList(query)
             _foodItems.value = result.getOrNull()
             _loadingStatus.value = when (result.isSuccess) {
                 true -> LoadingStatus.SUCCESS
@@ -30,4 +28,6 @@ class FoodItemsViewModel : ViewModel(){
             }
         }
     }
+
+
 }

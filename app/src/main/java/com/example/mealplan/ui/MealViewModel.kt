@@ -1,10 +1,8 @@
 package com.example.mealplan.ui
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import android.util.Log
+import androidx.lifecycle.*
 import com.example.mealplan.data.AppDatabase
 import com.example.mealplan.data.Meal
 import com.example.mealplan.data.MealRepository
@@ -15,11 +13,18 @@ class MealViewModel(application: Application): AndroidViewModel(application) {
         AppDatabase.getInstance(application).MealDao()
     )
 
-    var meals: LiveData<List<Meal>?> = repository.getAllMeals().asLiveData()
+    var meals: LiveData<List<Meal>> = repository.getAllMeals().asLiveData()
+    var meal = MutableLiveData<Meal>()
 
-    fun addMeal(meal: Meal) {
+    fun addMeal(addMeal: Meal) {
         viewModelScope.launch {
-            repository.insertMeal(meal)
+            meal.postValue(repository.insertMeal(addMeal))
+        }
+    }
+
+    fun updateMeal(updateMeal: Meal) {
+        viewModelScope.launch {
+            meal.postValue(repository.updateMeal(updateMeal))
         }
     }
 
@@ -31,14 +36,13 @@ class MealViewModel(application: Application): AndroidViewModel(application) {
 
     fun getMealByDate(date: String) {
         viewModelScope.launch {
-            val results = repository.searchMealByDate(date).asLiveData()
-            if (results.value != null)
-                meals = results
-            else
-                addMeal(Meal("Breakfast", date))
-                addMeal(Meal("Lunch", date))
-                addMeal(Meal("Dinner", date))
-                meals = repository.searchMealByDate(date).asLiveData()
+            meals = repository.searchMealByDate(date).asLiveData()
+        }
+    }
+
+    fun getMealByDateAndName(date: String, name: String) {
+        viewModelScope.launch {
+            meal.postValue(repository.searchMealByDateAndName(date, name))
         }
     }
 }
