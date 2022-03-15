@@ -42,34 +42,10 @@ class NutrientsViewModel(application: Application): AndroidViewModel(application
         }
     }
 
-    fun searchNutrientbyItemId(id: Long) {
-//        var query: List<NutrientData>? = null
-        viewModelScope.launch {
-//            var temp = nutrients.value
-//            var temp2 = repository.searchNutrientByItemId(id)
-////            query = repository.searchNutrientByItemId(id)
-//            temp?.add(repository.searchNutrientByItemId(id))
-//            Log.d("temp: ", temp.toString())
-
-            nutrients.postValue(listOf<NutrientData>()?.plus(nutrients.value).plus(repository.searchNutrientByItemId(id)) as List<NutrientData>?)
-
-
-//            Log.d("query", query.toString())
-
-
-//            Log.d("nutrient.value: ", nutrients.value.toString())
-////
-//            if (temp != null){
-//                Log.d("temp not null", "")
-//                nutrients.postValue(temp!!)
-//            }
-//            Log.d("nutrient.value: ", nutrients.value.toString())
-//            nutrients.value?.add(repository.searchNutrientByItemId(id).asLiveData().value)
-
+    fun searchAllNutrientsByMealId(id: Long) {
+        viewModelScope.launch{
+            nutrients.postValue(repository.searchAllNutrientsForMeal(id))
         }
-
-////
-//        Log.d("temp: ", temp.toString())
     }
 
 }

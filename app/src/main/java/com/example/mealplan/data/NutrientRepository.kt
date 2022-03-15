@@ -12,4 +12,7 @@ class NutrientRepository (private val dao: NutrientDao) {
     suspend fun searchNutrientByItemId(item_Id: Long): List<NutrientData>? {
         return dao.searchNutrientByItemId(item_Id)
     }
+    suspend fun searchAllNutrientsForMeal(meal_id: Long): List<NutrientData>? {
+        return dao.searchAllNutrientsForMeal(meal_id)
+    }
 }

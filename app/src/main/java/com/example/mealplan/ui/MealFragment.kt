@@ -74,25 +74,7 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
 
 
         mealIngredientsViewModel.mealIngredients.observe(viewLifecycleOwner) { foodItem ->
-            Log.d("in observer1", "")
             mealIngredientsAdapter.showIngredients(foodItem)
-            if (foodItem != null) {
-                nutrientsViewModel.nutrients.observe(viewLifecycleOwner) { nutrients ->
-                    if(nutrients != null) {
-                        Log.d("nutrients not null", "")
-                        computeNutritionalInfo(nutrients as ArrayList<List<NutrientData>?>, view)
-                    }
-                    else{
-                        Log.d("nutrients ARE null", "")
-                    }
-                    Log.d("in observer2", "")
-                }
-
-                for (item in foodItem) {
-                    Log.d("logging ingredient", "")
-                    nutrientsViewModel.searchNutrientbyItemId(item.id)
-                }
-            }
         }
 
         val save_btn: Button = view.findViewById(R.id.save_meal_btn)
@@ -122,7 +104,7 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
         //TODO(Whatever this does)
     }
 
-    fun computeNutritionalInfo(nutrients: ArrayList<List<NutrientData>?>, view: View) {
+    fun computeNutritionalInfo(nutrients: List<NutrientData>?, view: View) {
 //        Log.d("nutrients: ", nutrients.toString())
 //        if (nutrients != null) {
 //            for (nutrient in nutrients) {
@@ -167,7 +149,7 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.save_recipe_item -> {
-                //need to update the foodItems for this meal to point to the recipe also
+                //TODO need to update the foodItems for this meal to point to the recipe also
                 // in other words, we need to adjust the recipe_id field for each foodItem such
                 // that they point to the recipe created by the following line:
                 recipeViewModel.addRecipe(Recipe(description = desc.text.toString(), notes = notes.text.toString(), url = url.text.toString()))
@@ -200,8 +182,13 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
             desc.text = meal.description
             notes.text = meal.notes
             url.text = meal.url
-            // need to update the ingredients here to display - data should be updated
+            //TODO need to update the ingredients here to display - data should be updated
             // in the recipe selection fragment on the click listener "onRecipeClick"
+        }
+        nutrientsViewModel.searchAllNutrientsByMealId(meal.id)
+        nutrientsViewModel.nutrients.observe(viewLifecycleOwner) { nutrients ->
+            Log.d("NutrientsInResume: ", nutrients.toString())
+            //TODO call the compute function on the nutrients list
         }
         super.onResume()
         Log.d("Resume: ", "MealActivity")
