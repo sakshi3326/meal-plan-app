@@ -11,12 +11,14 @@ class MealIngredientsViewModel(application: Application) : AndroidViewModel(appl
 	private val repository = FoodItemRepository(
 		AppDatabase.getInstance(application).FoodItemDao()
 	)
-	var mealIngredients: LiveData<List<FoodItemData>?> = repository.searchItemsByMealID(0).asLiveData()
+	var mealIngredients = MutableLiveData<List<FoodItemData>>()
 	var mealIngredient = MutableLiveData<FoodItemData>()
+
 
 	fun showIngredients(mealID: Long) {
 		viewModelScope.launch {
-			mealIngredients = repository.searchItemsByMealID(mealID).asLiveData()
+			mealIngredients.postValue(repository.searchItemsByMealID(mealID))
 			}
 		}
+
 	}

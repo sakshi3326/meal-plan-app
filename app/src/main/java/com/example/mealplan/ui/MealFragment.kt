@@ -10,15 +10,17 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mealplan.R
-import com.example.mealplan.data.FoodItem
-import com.example.mealplan.data.FoodItemData
-import com.example.mealplan.data.Meal
-import com.example.mealplan.data.Recipe
+import com.example.mealplan.data.*
+import kotlinx.coroutines.delay
+import java.util.*
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 class MealFragment: Fragment(R.layout.meal_fragment) {
     lateinit var meal: Meal
@@ -29,6 +31,11 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
 
     private val recipeViewModel: RecipeViewModel by viewModels()
     private val mealViewModel: MealViewModel by viewModels()
+    private val nutrientsViewModel: NutrientsViewModel by viewModels()
+
+    private var proteinVal = MutableLiveData<Double>()
+    private var calVal = MutableLiveData<Double>()
+    private var fatVal = MutableLiveData<Double>()
 
     //NEW Adapter
     private var mealIngredientsAdapter = MealIngredientsAdapter(::onFoodItemClick)
@@ -51,6 +58,10 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
         url = view.findViewById(R.id.meal_url_text)
         url.text = meal.url
 
+        proteinVal.postValue(0.0)
+        fatVal.postValue(0.0)
+        calVal.postValue(0.0)
+
         //NEW Adapter
         mealIngredientsRV = view.findViewById(R.id.rv_meal_ingredients)
 
@@ -61,8 +72,27 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
 
         mealIngredientsViewModel.showIngredients(meal.id)
 
+
         mealIngredientsViewModel.mealIngredients.observe(viewLifecycleOwner) { foodItem ->
+            Log.d("in observer1", "")
             mealIngredientsAdapter.showIngredients(foodItem)
+            if (foodItem != null) {
+                nutrientsViewModel.nutrients.observe(viewLifecycleOwner) { nutrients ->
+                    if(nutrients != null) {
+                        Log.d("nutrients not null", "")
+                        computeNutritionalInfo(nutrients as ArrayList<List<NutrientData>?>, view)
+                    }
+                    else{
+                        Log.d("nutrients ARE null", "")
+                    }
+                    Log.d("in observer2", "")
+                }
+
+                for (item in foodItem) {
+                    Log.d("logging ingredient", "")
+                    nutrientsViewModel.searchNutrientbyItemId(item.id)
+                }
+            }
         }
 
         val save_btn: Button = view.findViewById(R.id.save_meal_btn)
@@ -90,6 +120,30 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
         // save either the recipe or meal passed into the args with this ingredient added
         //findNavController().navigateUp()
         //TODO(Whatever this does)
+    }
+
+    fun computeNutritionalInfo(nutrients: ArrayList<List<NutrientData>?>, view: View) {
+//        Log.d("nutrients: ", nutrients.toString())
+//        if (nutrients != null) {
+//            for (nutrient in nutrients) {
+//                if (nutrient != null) {
+//                    Log.d("nutrient: ", nutrient.toString())
+//                    var protein = nutrient?.find{ nutrient -> "Protein".equals(nutrient.name)}
+//                    if (protein?.unit == "G") {
+//                        proteinVal.value = proteinVal.value?.plus(protein.nutritionVal)
+//                    }
+//                    else {
+//                        if (protein != null) {
+//                            proteinVal.value = proteinVal.value?.plus(protein.nutritionVal / 1000)
+//                        }
+//                    }
+//                }
+//
+//            }
+//        }
+//        var textView: TextView = view.findViewById(R.id.carbs)
+//        textView.text = proteinVal.value.toString()
+//        Log.d("protein: ", proteinVal.value.toString())
     }
 
     fun saveAndExit() {

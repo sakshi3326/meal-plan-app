@@ -41,5 +41,4 @@ class FoodItemViewModel(application: Application): AndroidViewModel(application)
         return results
     }
 
-
 }

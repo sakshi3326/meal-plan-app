@@ -21,4 +21,7 @@ interface NutrientDao {
 
     @Query("SELECT * FROM NutrientData WHERE id = :id LIMIT 1")
     fun searchNutrientById(id: Long): Flow<NutrientData>
+
+    @Query ("SELECT * FROM NutrientData WHERE item_id = :id")
+    fun searchNutrientByItemId(id: Long): List<NutrientData>?
 }

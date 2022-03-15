@@ -26,7 +26,7 @@ interface FoodItemDao {
     fun searchItemsByName(name: String): Flow<FoodItemData?>
 
     @Query("SELECT * FROM FoodItemData WHERE meal_id = :mealID")
-    fun searchItemsByMealID(mealID: Long): Flow<List<FoodItemData>?>
+    fun searchItemsByMealID(mealID: Long): List<FoodItemData>?
 
     @Query("SELECT * FROM FoodItemData WHERE recipe_id = :recipeID")
     fun searchItemsByRecipeID(recipeID: Long): Flow<List<FoodItemData>?>

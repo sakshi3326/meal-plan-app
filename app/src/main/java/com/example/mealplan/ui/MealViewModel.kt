@@ -45,4 +45,5 @@ class MealViewModel(application: Application): AndroidViewModel(application) {
             meal.postValue(repository.searchMealByDateAndName(date, name))
         }
     }
+
 }
