@@ -48,4 +48,9 @@ class NutrientsViewModel(application: Application): AndroidViewModel(application
         }
     }
 
+    fun searchAllNutrientsByRecipeId(id: Long) {
+        viewModelScope.launch {
+            nutrients.postValue(repository.searchAllNutrientsForRecipe(id))
+        }
+    }
 }

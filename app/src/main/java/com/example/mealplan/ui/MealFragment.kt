@@ -10,17 +10,12 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mealplan.R
 import com.example.mealplan.data.*
-import kotlinx.coroutines.delay
-import java.util.*
-import java.util.Timer
-import kotlin.concurrent.schedule
 
 class MealFragment: Fragment(R.layout.meal_fragment) {
     lateinit var meal: Meal
@@ -29,13 +24,15 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
     lateinit var notes: TextView
     lateinit var url: TextView
 
+    lateinit var carbs: TextView
+    lateinit var fat: TextView
+    lateinit var cals: TextView
+    lateinit var protein: TextView
+
     private val recipeViewModel: RecipeViewModel by viewModels()
     private val mealViewModel: MealViewModel by viewModels()
     private val nutrientsViewModel: NutrientsViewModel by viewModels()
-
-    private var proteinVal = MutableLiveData<Double>()
-    private var calVal = MutableLiveData<Double>()
-    private var fatVal = MutableLiveData<Double>()
+    private val foodItemViewModel: FoodItemViewModel by viewModels()
 
     //NEW Adapter
     private var mealIngredientsAdapter = MealIngredientsAdapter(::onFoodItemClick)
@@ -58,9 +55,10 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
         url = view.findViewById(R.id.meal_url_text)
         url.text = meal.url
 
-        proteinVal.postValue(0.0)
-        fatVal.postValue(0.0)
-        calVal.postValue(0.0)
+        carbs = view.findViewById(R.id.carbs)
+        fat = view.findViewById(R.id.fat)
+        cals = view.findViewById(R.id.calories)
+        protein = view.findViewById(R.id.protein)
 
         //NEW Adapter
         mealIngredientsRV = view.findViewById(R.id.rv_meal_ingredients)
@@ -75,6 +73,11 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
 
         mealIngredientsViewModel.mealIngredients.observe(viewLifecycleOwner) { foodItem ->
             mealIngredientsAdapter.showIngredients(foodItem)
+        }
+
+        nutrientsViewModel.searchAllNutrientsByMealId(meal.id)
+        nutrientsViewModel.nutrients.observe(viewLifecycleOwner) { nutrients ->
+            computeNutritionalInfo(nutrients)
         }
 
         val save_btn: Button = view.findViewById(R.id.save_meal_btn)
@@ -93,7 +96,6 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
                 val directions = MealFragmentDirections.navigateFromMealFormToIngredientsSelection(thisMeal, null)
                 findNavController().navigate(directions)
             }
-
         }
     }
 
@@ -104,28 +106,49 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
         //TODO(Whatever this does)
     }
 
-    fun computeNutritionalInfo(nutrients: List<NutrientData>?, view: View) {
-//        Log.d("nutrients: ", nutrients.toString())
-//        if (nutrients != null) {
-//            for (nutrient in nutrients) {
-//                if (nutrient != null) {
-//                    Log.d("nutrient: ", nutrient.toString())
-//                    var protein = nutrient?.find{ nutrient -> "Protein".equals(nutrient.name)}
-//                    if (protein?.unit == "G") {
-//                        proteinVal.value = proteinVal.value?.plus(protein.nutritionVal)
-//                    }
-//                    else {
-//                        if (protein != null) {
-//                            proteinVal.value = proteinVal.value?.plus(protein.nutritionVal / 1000)
-//                        }
-//                    }
-//                }
-//
-//            }
-//        }
-//        var textView: TextView = view.findViewById(R.id.carbs)
-//        textView.text = proteinVal.value.toString()
-//        Log.d("protein: ", proteinVal.value.toString())
+    fun computeNutritionalInfo(nutrients: List<NutrientData>?) {
+        var proteinVal = 0.0
+        var calorieVal = 0.0
+        var carbsVal = 0.0
+        var fatsVal = 0.0
+        if (nutrients != null) {
+            var proteins = nutrients.filter { nutrient -> "Protein".equals(nutrient.name) }
+            for (protein in proteins) {
+                if (protein.unit == "G") {
+                    proteinVal += protein.nutritionVal
+                } else {
+                    proteinVal += protein.nutritionVal / 1000
+                }
+            }
+            var calories = nutrients.filter { nutrient -> "Energy".equals(nutrient.name) }
+            for (calorie in calories) {
+                if (calorie.unit == "KCAL") {
+                    calorieVal += calorie.nutritionVal
+                }
+            }
+            var carbs = nutrients.filter { nutrient -> "Carbohydrate, by difference".equals(nutrient.name) }
+            for (carb in carbs) {
+                if (carb.unit == "G") {
+                    carbsVal += carb.nutritionVal
+                }
+                else {
+                    carbsVal += carb.nutritionVal / 1000
+                }
+            }
+            var fats = nutrients.filter { nutrient -> nutrient.name.equals("Total lipid (fat)") }
+            for (fat in fats) {
+                if (fat.unit == "G") {
+                    fatsVal += fat.nutritionVal
+                }
+                else {
+                    fatsVal += fat.nutritionVal / 1000
+                }
+            }
+        }
+        carbs.text = "Carbohydrates: " + String.format("%.2f", carbsVal) + " G"
+        fat.text = "Fat: " + String.format("%.2f", fatsVal) + " G"
+        cals.text = "Calories: " + String.format("%.2f", calorieVal) + " Calories"
+        protein.text = "Protein: " + String.format("%.2f", proteinVal) + " G"
     }
 
     fun saveAndExit() {
@@ -152,8 +175,27 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
                 //TODO need to update the foodItems for this meal to point to the recipe also
                 // in other words, we need to adjust the recipe_id field for each foodItem such
                 // that they point to the recipe created by the following line:
-                recipeViewModel.addRecipe(Recipe(description = desc.text.toString(), notes = notes.text.toString(), url = url.text.toString()))
-                saveAndExit()
+                var r: Recipe? = null
+                recipeViewModel.recipe.observe(viewLifecycleOwner) { recipe ->
+                    r = recipe
+                    foodItemViewModel.searchAllItemsByMealId(meal.id)
+                    Log.d("MealFrag: ", "searching for all food items for the meal")
+                }
+                foodItemViewModel.foodItems.observe(viewLifecycleOwner) { items ->
+                    Log.d("MealFrag: ", "changing all recipe_ids for items")
+                    if (items != null) {
+                        for (item in items) {
+                            item.recipe_id = r?.id
+                            foodItemViewModel.updateItem(item)
+                        }
+                    }
+                }
+                var rToAdd = Recipe(
+                    description = desc.text.toString(),
+                    notes = notes.text.toString(),
+                    url = url.text.toString()
+                )
+                recipeViewModel.addRecipe(rToAdd)
                 true
             }
             R.id.select_recipe_item -> {
@@ -184,11 +226,6 @@ class MealFragment: Fragment(R.layout.meal_fragment) {
             url.text = meal.url
             //TODO need to update the ingredients here to display - data should be updated
             // in the recipe selection fragment on the click listener "onRecipeClick"
-        }
-        nutrientsViewModel.searchAllNutrientsByMealId(meal.id)
-        nutrientsViewModel.nutrients.observe(viewLifecycleOwner) { nutrients ->
-            Log.d("NutrientsInResume: ", nutrients.toString())
-            //TODO call the compute function on the nutrients list
         }
         super.onResume()
         Log.d("Resume: ", "MealActivity")

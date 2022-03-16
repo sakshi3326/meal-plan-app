@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mealplan.R
 import com.example.mealplan.data.FoodItemData
+import com.example.mealplan.data.NutrientData
 import com.example.mealplan.data.Recipe
 
 class RecipeFragment: Fragment(R.layout.recipe_fragment) {
@@ -21,8 +22,13 @@ class RecipeFragment: Fragment(R.layout.recipe_fragment) {
     lateinit var recipeNotes: TextView
     lateinit var recipeUrl: TextView
 
+    lateinit var carbs: TextView
+    lateinit var fat: TextView
+    lateinit var cals: TextView
+    lateinit var protein: TextView
 
     private val viewModel: RecipeViewModel by viewModels()
+    private val nutrientsViewModel: NutrientsViewModel by viewModels()
 
     private var recipeIngredientsAdapter = RecipeIngredientsAdapter(::onFoodItemClick)
     private val recipeIngredientsViewModel: RecipeIngredientsViewModel by viewModels()
@@ -31,11 +37,17 @@ class RecipeFragment: Fragment(R.layout.recipe_fragment) {
 
     var recipe: Recipe? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
 
         recipeDesc = view.findViewById(R.id.recipe_description_text)
         recipeNotes = view.findViewById(R.id.recipe_notes_text)
         recipeUrl = view.findViewById(R.id.recipe_url_text)
+
+        carbs = view.findViewById(R.id.carbs)
+        fat = view.findViewById(R.id.fat)
+        cals = view.findViewById(R.id.calories)
+        protein = view.findViewById(R.id.protein)
+
         //Recipe Adapter
         recipeIngredientsRV = view.findViewById(R.id.rv_recipe_ingredients)
 
@@ -50,6 +62,12 @@ class RecipeFragment: Fragment(R.layout.recipe_fragment) {
             recipeNotes.text = recipe?.notes.toString()
             recipeUrl.text = recipe?.url.toString()
             recipeIngredientsViewModel.showIngredients(recipe!!.id)
+        }
+
+        if (recipe?.id != null)
+            nutrientsViewModel.searchAllNutrientsByRecipeId(recipe!!.id)
+        nutrientsViewModel.nutrients.observe(viewLifecycleOwner) { nutrients ->
+            computeNutritionalInfo(nutrients)
         }
 
         recipeIngredientsViewModel.recipeIngredients.observe(viewLifecycleOwner) { foodItem ->
@@ -85,6 +103,51 @@ class RecipeFragment: Fragment(R.layout.recipe_fragment) {
             }
 
         }
+    }
+
+    fun computeNutritionalInfo(nutrients: List<NutrientData>?) {
+        var proteinVal = 0.0
+        var calorieVal = 0.0
+        var carbsVal = 0.0
+        var fatsVal = 0.0
+        if (nutrients != null) {
+            var proteins = nutrients.filter { nutrient -> "Protein".equals(nutrient.name) }
+            for (protein in proteins) {
+                if (protein.unit == "G") {
+                    proteinVal += protein.nutritionVal
+                } else {
+                    proteinVal += protein.nutritionVal / 1000
+                }
+            }
+            var calories = nutrients.filter { nutrient -> "Energy".equals(nutrient.name) }
+            for (calorie in calories) {
+                if (calorie.unit == "KCAL") {
+                    calorieVal += calorie.nutritionVal
+                }
+            }
+            var carbs = nutrients.filter { nutrient -> "Carbohydrate, by difference".equals(nutrient.name) }
+            for (carb in carbs) {
+                if (carb.unit == "G") {
+                    carbsVal += carb.nutritionVal
+                }
+                else {
+                    carbsVal += carb.nutritionVal / 1000
+                }
+            }
+            var fats = nutrients.filter { nutrient -> nutrient.name.equals("Total lipid (fat)") }
+            for (fat in fats) {
+                if (fat.unit == "G") {
+                    fatsVal += fat.nutritionVal
+                }
+                else {
+                    fatsVal += fat.nutritionVal / 1000
+                }
+            }
+        }
+        carbs.text = "Carbohydrates: " + String.format("%.2f", carbsVal) + " G"
+        fat.text = "Fat: " + String.format("%.2f", fatsVal) + " G"
+        cals.text = "Calories: " + String.format("%.2f", calorieVal) + " Calories"
+        protein.text = "Protein: " + String.format("%.2f", proteinVal) + " G"
     }
 
     private fun onFoodItemClick(foodItem: FoodItemData) {

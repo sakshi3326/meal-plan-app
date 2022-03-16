@@ -7,7 +7,7 @@ const val DATABASE_NAME = "mealplan-db"
 
 @Database(
     entities = [Recipe::class, Meal::class, FoodItemData::class, NutrientData::class],
-    version = 2)
+    version = 1)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase(){
     abstract fun RecipeDao(): RecipeDao

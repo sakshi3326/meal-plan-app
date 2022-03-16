@@ -27,4 +27,7 @@ interface NutrientDao {
 
     @Query("SELECT nd.item_id, fd.id, fd.meal_id, nd.name, nd.nutritionVal, nd.unit FROM FoodItemData AS fd INNER JOIN NutrientData AS nd ON nd.item_id = fd.id WHERE fd.meal_id = :id ")
     fun searchAllNutrientsForMeal(id: Long): List<NutrientData>?
+
+    @Query("SELECT nd.item_id, fd.id, fd.recipe_id, nd.name, nd.nutritionVal, nd.unit FROM FoodItemData AS fd INNER JOIN NutrientData AS nd ON nd.item_id = fd.id WHERE fd.recipe_id = :id ")
+    fun searchAllNutrientsForRecipe(id: Long): List<NutrientData>?
 }
