@@ -12,10 +12,17 @@ class FoodItemViewModel(application: Application): AndroidViewModel(application)
     )
 
     val foodItem = MutableLiveData<FoodItemData>()
+    val foodItems = MutableLiveData<List<FoodItemData>?>()
 
     fun addItem(item: FoodItemData) {
         viewModelScope.launch {
             foodItem.postValue(repository.insertItem(item))
+        }
+    }
+
+    fun updateItem(item: FoodItemData) {
+        viewModelScope.launch {
+            repository.updateItem(item)
         }
     }
 
@@ -25,20 +32,12 @@ class FoodItemViewModel(application: Application): AndroidViewModel(application)
         }
     }
 
-    fun searchItemsByName(name: String): FoodItemData? {
-        var results: FoodItemData? = null
+    fun searchAllItemsByMealId(id: Long) {
         viewModelScope.launch {
-            results = repository.searchItemsByName(name).asLiveData().value
+            foodItems.postValue(repository.searchItemsByMealID(id))
         }
-        return results
     }
 
-    fun getItemNutrients(): List<FoodItemDataWithNutrients>? {
-        var results: List<FoodItemDataWithNutrients>? = null
-        viewModelScope.launch {
-            results = repository.getItemNutrients()
-        }
-        return results
-    }
+
 
 }

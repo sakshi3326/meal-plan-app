@@ -13,6 +13,9 @@ interface FoodItemDao {
         return foodItemData
     }
 
+    @Update
+    suspend fun update(item: FoodItemData)
+
     @Insert(onConflict = REPLACE)
     suspend fun _insert(foodItemData: FoodItemData): Long
 
