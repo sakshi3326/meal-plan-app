@@ -55,8 +55,7 @@ class FoodItemsAdapter()
             currentFoodItem = foodItem
 
             val ctx = itemView.context
-
-            nameTv.text = foodItem.name
+            nameTv.text = foodItem.name + " - " + foodItem.servingSize + " calories"
             checkBox.setOnClickListener{
                 toggleItem(foodItem)
             }
