@@ -1,49 +1,26 @@
-# meal-plan-app
-A Kotlin Android application for meal planning
+Meal Plan App
+A meal planning application developed using Kotlin for Android. This app helps users plan their meals, track ingredients, and store recipes for future use. It leverages Room Database for local storage and integrates Moshi for JSON parsing and RecyclerView for displaying meal data.
 
-## What I Learned
-
-  ### Structuring the App
-
-  Data
-  - Interact with local data using Dao interfaces
-  - Fetch cloud (API) data using Service interfaces
-  - Utilize Dao interfaces with Repository classes
-  - Model local and cloud data with data classes
-
-  Connecting Data and UI
-  - Use Adapters to populate and change Recycler Views
-  - Connect Repositories to Data with View Model classes
-  - Use Fragment classes to Pull together UI and Data resources and attach functionality to events
-
-  User Interface
-  - Build a main layout and fill it in with varying fragments
-  - Utilize icons and other images
-  - Create a menu
-  - Define navigation (including passing data) between fragments
-  - Preset string and color values
-
-  ### Android Dev in Kotlin
-  - Room database
-  - Moshi JSON parsing
-  - RecyclerViews
-  - MutableLiveData, LiveData, Lists, MutableLists
-  - Observing asynchronous changes in data with Observers
-  - Jetpack Navigation: Fragmentation
-  
-## How to Use
-
-Begin by cloning the repository and installing Android Studio. Instructions for Android Studio set up can be found online: https://developer.android.com/studio/intro/
-
-Once that's done, set up an Emulator to run the application within Android Studio. Again, documentation can be found online. The Emulator will hike up the fans, so make sure you've some computing power before you try to start it up!
-
-The app should be running on the emulator and at a green-themed calendar screen.
-
-Navigate about the app by picking a date on which you would like to plan a meal for. Create a new meal, or fill in one of the regular daily meals (Breakfast, Lunch, or Dinner). Name the meal, select ingredients for the meal, even add a URL for the recipe you're using or add some instructional notes, or even notes on how delicious (hopefully) the food was. After ingredients are added, ooh and ahh at the nutritional information provided about your meal.
-
-Navigate to the home screen and click in the top right corner to view all of your saved recipes. Recipes can be used later as references for meal creation! Edit and add to recipes in the recipe view.
-
-## Other Notes
-  - For reverse populating a meal with a recipe, the navigational components are built, but assigning the ingredients to the meal within the database is incomplete. The name of the recipe, however, will be assigned to your meal. 
-  - The same can be said for saving a recipe from an existing meal.
-  - ingredients have buttons set up for them but the feature was never implemented. The idea was that ideally, the app would allow user input to modify how much of said ingredient was being used in the meal/recipe (for example, an 8 lb pack of chicken seems unreasonable.
+What I Learned
+App Structure
+Data Management
+Dao Interfaces: Interact with local data using Data Access Objects (DAOs).
+API Integration: Fetch cloud data via Service interfaces.
+Repository Classes: Utilize repositories to manage data interactions between DAOs and service interfaces.
+Data Classes: Model local and cloud data using Kotlin data classes.
+Connecting Data to UI
+Adapters & Recycler Views: Use adapters to populate and modify Recycler Views.
+ViewModel Classes: Connect repositories to data via ViewModels.
+Fragments: Use fragments to manage UI and data interactions, attaching functionality to events such as button clicks and data updates.
+User Interface
+Layouts & Fragments: Design a main layout with multiple dynamic fragments for different sections of the app.
+Icons & Images: Incorporate images and icons to enhance UI appearance.
+Menu Creation: Design a navigation menu for ease of access.
+Navigation & Data Passing: Implement navigation between fragments with the ability to pass data between them.
+UI Customization: Use preset string and color resources to maintain consistency across the app.
+Key Android Development Concepts
+Room Database: Store and manage meal data locally.
+Moshi JSON Parsing: Parse JSON data received from APIs.
+RecyclerView: Display dynamic lists of meals, recipes, and ingredients.
+LiveData & MutableLiveData: Observe and update the UI based on changes in data.
+Jetpack Navigation: Implement efficient and intuitive navigation between fragments.
